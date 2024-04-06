@@ -1,7 +1,7 @@
 "use client";
 
 import { PARTYKIT_HOST } from "@/lib/env";
-import { GameState } from "@/lib/types/GameState";
+import { GameState, getPlayerState } from "@/lib/types/GameState";
 import usePartySocket from "partysocket/react";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -41,14 +41,16 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
 
   const isMyTurn = myId === gameState?.currentPlayerId;
   const isThereAWinner = gameState?.winnerId !== undefined;
+  const currentPlayer = getPlayerState(gameState, myId);
+  const winner = getPlayerState(gameState, gameState?.winnerId);
 
   return (
     <div>
-      <h3>Welcome {myId}!</h3>
+      <h3>Welcome {currentPlayer?.name}!</h3>
       <pre>{JSON.stringify(gameState, null, 2)}</pre>
       {isThereAWinner && (
         <div>
-          <h3>Winner: {gameState.winnerId}</h3>
+          <h3>Winner: {winner?.name}</h3>
           <p>
             {gameState?.winnerId === myId
               ? "You won!"

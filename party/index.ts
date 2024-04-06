@@ -11,7 +11,11 @@ export default class PigGameServer implements Party.Server {
       return;
     }
 
-    gameState.players[connection.id] = { totalScore: 0, currentScore: 0 };
+    gameState.players[connection.id] = {
+      name: `Player ${Object.keys(gameState.players).length + 1}`,
+      totalScore: 0,
+      currentScore: 0,
+    };
 
     if (Object.keys(gameState.players).length === 1) {
       gameState.currentPlayerId = connection.id;
@@ -101,7 +105,7 @@ export default class PigGameServer implements Party.Server {
         gameState.players[gameState.currentPlayerId].currentScore;
       gameState.players[gameState.currentPlayerId].currentScore = 0;
 
-      if (gameState.players[gameState.currentPlayerId].totalScore >= 50) {
+      if (gameState.players[gameState.currentPlayerId].totalScore >= 20) {
         gameState.winnerId = gameState.currentPlayerId;
       }
 
