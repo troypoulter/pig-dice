@@ -9,6 +9,39 @@ export const metadata: Metadata = {
   title: "Pig: The Ultimate Dice Duel",
   description:
     "Risk it all or play it safe in a game of strategy and luck - where every roll can lead to victory or defeat!",
+  metadataBase: new URL("https://pig-dice.troypoulter.com"),
+  authors: [
+    {
+      name: "Troy Poulter",
+      url: "https://troypoulter.com",
+    },
+  ],
+  creator: "Troy Poulter",
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    url: "https://pig-dice.troypoulter.com",
+    title: "Pig: The Ultimate Dice Duel",
+    description:
+      "Risk it all or play it safe in a game of strategy and luck - where every roll can lead to victory or defeat!",
+    siteName: "Pig: The Ultimate Dice Duel",
+    images: [
+      {
+        url: `https://pig-dice.troypoulter.com/og.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Pig: The Ultimate Dice Duel",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pig: The Ultimate Dice Duel",
+    description:
+      "Risk it all or play it safe in a game of strategy and luck - where every roll can lead to victory or defeat!",
+    images: [`https://pig-dice.troypoulter.com/og.jpg`],
+    creator: "@troypoulterr",
+  },
 };
 
 export default function RootLayout({
