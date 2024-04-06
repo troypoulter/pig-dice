@@ -76,9 +76,11 @@ export default class PigGameServer implements Party.Server {
     let gameState = await this.room.storage.get<GameState>("gameState");
     if (!gameState) return; // Exit if game state is not found
 
+    if (sender.id !== gameState.currentPlayerId) return; // Only the current player can act.
+
     const event = JSON.parse(message);
 
-    if (event.type === "roll" && sender.id === gameState.currentPlayerId) {
+    if (event.type === "roll") {
       const roll = Math.floor(Math.random() * 6) + 1;
       gameState.lastRoll = roll;
       if (roll === 1) {
@@ -90,6 +92,18 @@ export default class PigGameServer implements Party.Server {
 
       await this.room.storage.put("gameState", gameState); // Persist game state changes
       this.room.broadcast(JSON.stringify({ message: "Turn done!", gameState }));
+    }
+
+    if (event.type === "hold") {
+      gameState.players[gameState.currentPlayerId].totalScore +=
+        gameState.players[gameState.currentPlayerId].currentScore;
+      gameState.players[gameState.currentPlayerId].currentScore = 0;
+      this.switchPlayer(gameState);
+
+      await this.room.storage.put("gameState", gameState); // Persist game state changes
+      this.room.broadcast(
+        JSON.stringify({ message: "Turn done - hold!", gameState })
+      );
     }
   }
 

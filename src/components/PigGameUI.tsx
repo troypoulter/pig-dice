@@ -28,8 +28,11 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   });
 
   const handleRollDice = () => {
-    // Send a message to the server to roll the dice
     socket.send(JSON.stringify({ type: "roll" }));
+  };
+
+  const handleHold = () => {
+    socket.send(JSON.stringify({ type: "hold" }));
   };
 
   const isMyTurn = myId === gameState?.currentPlayerId;
@@ -38,7 +41,12 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
     <div>
       <h3>Welcome {myId}!</h3>
       <pre>{JSON.stringify(gameState, null, 2)}</pre>
-      {isMyTurn && <Button onClick={handleRollDice}>Roll Dice!</Button>}
+      {isMyTurn && (
+        <div className="flex flex-row gap-x-2">
+          <Button onClick={handleRollDice}>Roll Dice!</Button>
+          <Button onClick={handleHold}>Hold!</Button>
+        </div>
+      )}
       {!isMyTurn && (
         <Button disabled aria-disabled={true}>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
