@@ -76,11 +76,11 @@ export default class PigGameServer implements Party.Server {
     let gameState = await this.room.storage.get<GameState>("gameState");
     if (!gameState) return; // Exit if game state is not found
 
-    if (sender.id !== gameState.currentPlayerId) return; // Only the current player can act.
-
     const event = JSON.parse(message);
 
-    if (event.type === "roll") {
+    if (event.type === "roll" && sender.id === gameState.currentPlayerId) {
+      if (gameState.winnerId) return; // Exit if the game is already over.
+
       const roll = Math.floor(Math.random() * 6) + 1;
       gameState.lastRoll = roll;
       if (roll === 1) {
@@ -94,15 +94,40 @@ export default class PigGameServer implements Party.Server {
       this.room.broadcast(JSON.stringify({ message: "Turn done!", gameState }));
     }
 
-    if (event.type === "hold") {
+    if (event.type === "hold" && && sender.id === gameState.currentPlayerId) {
+      if (gameState.winnerId) return; // Exit if the game is already over.
+
       gameState.players[gameState.currentPlayerId].totalScore +=
         gameState.players[gameState.currentPlayerId].currentScore;
       gameState.players[gameState.currentPlayerId].currentScore = 0;
+
+      if (gameState.players[gameState.currentPlayerId].totalScore >= 50) {
+        gameState.winnerId = gameState.currentPlayerId;
+      }
+
       this.switchPlayer(gameState);
 
       await this.room.storage.put("gameState", gameState); // Persist game state changes
       this.room.broadcast(
         JSON.stringify({ message: "Turn done - hold!", gameState })
+      );
+    }
+
+    if (event.type == "restart") {
+      if (!gameState.winnerId) return; // No winner yet.
+
+      // Reset the game state for a new round, with the winner starting
+      Object.keys(gameState.players).forEach((playerId) => {
+        gameState.players[playerId].totalScore = 0;
+        gameState.players[playerId].currentScore = 0;
+      });
+      gameState.currentPlayerId = gameState.winnerId;
+      gameState.winnerId = undefined; // Reset the winner
+      gameState.lastRoll = undefined; // Reset the last roll
+
+      await this.room.storage.put("gameState", gameState); // Persist the reset game state
+      this.room.broadcast(
+        JSON.stringify({ message: "Game restarted", gameState })
       );
     }
   }

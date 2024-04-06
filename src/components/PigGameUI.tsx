@@ -35,19 +35,35 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
     socket.send(JSON.stringify({ type: "hold" }));
   };
 
+  const handleRestart = () => {
+    socket.send(JSON.stringify({ type: "restart" }));
+  };
+
   const isMyTurn = myId === gameState?.currentPlayerId;
+  const isThereAWinner = gameState?.winnerId !== undefined;
 
   return (
     <div>
       <h3>Welcome {myId}!</h3>
       <pre>{JSON.stringify(gameState, null, 2)}</pre>
-      {isMyTurn && (
+      {isThereAWinner && (
+        <div>
+          <h3>Winner: {gameState.winnerId}</h3>
+          <p>
+            {gameState?.winnerId === myId
+              ? "You won!"
+              : "Better luck next time!"}
+          </p>
+          <Button onClick={handleRestart}>New Game!</Button>
+        </div>
+      )}
+      {isMyTurn && !isThereAWinner && (
         <div className="flex flex-row gap-x-2">
           <Button onClick={handleRollDice}>Roll Dice!</Button>
           <Button onClick={handleHold}>Hold!</Button>
         </div>
       )}
-      {!isMyTurn && (
+      {!isMyTurn && !isThereAWinner && (
         <Button disabled aria-disabled={true}>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Waiting for your turn...
