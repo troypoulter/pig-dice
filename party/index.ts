@@ -64,9 +64,7 @@ export default class PigGameServer implements Party.Server {
     });
   }
 
-  async onMessage(message: string | ArrayBuffer, sender: Party.Connection) {
-    if (typeof message !== "string") return;
-
+  async onMessage(message: string, sender: Party.Connection) {
     let gameState = await this.room.storage.get<GameState>("gameState");
     if (!gameState) return; // Exit if game state is not found
 
@@ -83,7 +81,7 @@ export default class PigGameServer implements Party.Server {
       }
 
       await this.room.storage.put("gameState", gameState); // Persist game state changes
-      this.room.broadcast(JSON.stringify(gameState));
+      this.room.broadcast(JSON.stringify({ message: "Turn done!", gameState }));
     }
   }
 
