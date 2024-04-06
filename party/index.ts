@@ -94,7 +94,7 @@ export default class PigGameServer implements Party.Server {
       this.room.broadcast(JSON.stringify({ message: "Turn done!", gameState }));
     }
 
-    if (event.type === "hold" && && sender.id === gameState.currentPlayerId) {
+    if (event.type === "hold" && sender.id === gameState.currentPlayerId) {
       if (gameState.winnerId) return; // Exit if the game is already over.
 
       gameState.players[gameState.currentPlayerId].totalScore +=
