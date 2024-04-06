@@ -52,11 +52,13 @@ export default class PigGameServer implements Party.Server {
         players: {},
         currentPlayerId: "", // This will be set when the first player connects
       };
+      console.log("New game room created");
       return new Response("New game room created.", { status: 200 });
     }
 
     if (this.gameState) {
       // If a game is already in progress or waiting for players
+      console.log("Game is already in progress.");
       return new Response(JSON.stringify(this.gameState), {
         status: 200,
         headers: { "Content-Type": "application/json" },
