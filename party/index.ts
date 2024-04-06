@@ -30,6 +30,14 @@ export default class PigGameServer implements Party.Server {
         JSON.stringify({ message: "Game has started!", gameState })
       );
     }
+
+    connection.send(
+      JSON.stringify({
+        message: "Connected players id",
+        gameState,
+        connectedPlayerId: connection.id,
+      })
+    );
   }
 
   async onRequest(req: Party.Request) {
