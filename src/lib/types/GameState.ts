@@ -1,6 +1,6 @@
 export type PlayerId = string;
 
-interface PlayerState {
+export interface PlayerState {
   name: string;
   totalScore: number;
   currentScore: number;

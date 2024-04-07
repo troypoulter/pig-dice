@@ -105,7 +105,7 @@ export default class PigGameServer implements Party.Server {
         gameState.players[gameState.currentPlayerId].currentScore;
       gameState.players[gameState.currentPlayerId].currentScore = 0;
 
-      if (gameState.players[gameState.currentPlayerId].totalScore >= 20) {
+      if (gameState.players[gameState.currentPlayerId].totalScore >= 50) {
         gameState.winnerId = gameState.currentPlayerId;
       }
 
