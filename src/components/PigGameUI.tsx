@@ -11,6 +11,7 @@ import usePartySocket from "partysocket/react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Dice6, Hand, Loader2, RefreshCcw } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
@@ -52,11 +53,18 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   return (
     <div>
       <div className="bg-blue-400 shadow-md rounded-lg my-8 flex flex-col items-center justify-center">
-        <div className="flex justify-between items-center w-full max-w-4xl p-8">
+        <div className="flex justify-between items-center w-full max-w-4xl p-4">
           {gameState &&
             Object.entries(gameState.players).map(
               ([playerId, playerState]: [PlayerId, PlayerState]) => (
-                <div key={playerId} className="text-white text-center">
+                <div
+                  key={playerId}
+                  className={cn(
+                    "text-white text-center p-4",
+                    playerId === gameState.currentPlayerId &&
+                      "bg-green-500 rounded-md"
+                  )}
+                >
                   <h2 className="text-4xl font-bold mb-4">
                     {playerState.name}
                   </h2>
