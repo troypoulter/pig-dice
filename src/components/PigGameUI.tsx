@@ -73,7 +73,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         <div className="flex justify-between items-center w-full max-w-4xl p-4">
           {showWinningConfetti && (
             <Confetti
-              numberOfPieces={1500}
+              numberOfPieces={500}
               gravity={0.05}
               recycle={false}
               onConfettiComplete={() => setShowWinningConfetti(false)}
@@ -81,7 +81,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           )}
           {showLosingConfetti && (
             <Confetti
-              numberOfPieces={1000}
+              numberOfPieces={500}
               gravity={0.05}
               drawShape={drawPigConfetti}
               recycle={false}
