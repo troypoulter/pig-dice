@@ -7,6 +7,7 @@ export interface PlayerState {
 }
 
 export interface GameState {
+  targetAmount: number;
   players: Record<PlayerId, PlayerState>;
   currentPlayerId: PlayerId;
   lastRoll?: number;

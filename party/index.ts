@@ -48,7 +48,11 @@ export default class PigGameServer implements Party.Server {
     if (req.method === "POST") {
       let gameState = await this.room.storage.get<GameState>("gameState");
       if (!gameState) {
-        gameState = { players: {}, currentPlayerId: "" }; // Initialize the game state
+        gameState = {
+          targetAmount: process.env.NODE_ENV === "development" ? 5 : 50,
+          players: {},
+          currentPlayerId: "",
+        }; // Initialize the game state
         console.log("New game room created");
         await this.room.storage.put("gameState", gameState); // Persist the new game state
         return new Response("New game room created.", { status: 200 });
@@ -105,7 +109,10 @@ export default class PigGameServer implements Party.Server {
         gameState.players[gameState.currentPlayerId].currentScore;
       gameState.players[gameState.currentPlayerId].currentScore = 0;
 
-      if (gameState.players[gameState.currentPlayerId].totalScore >= 50) {
+      if (
+        gameState.players[gameState.currentPlayerId].totalScore >=
+        gameState.targetAmount
+      ) {
         gameState.winnerId = gameState.currentPlayerId;
       }
 

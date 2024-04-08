@@ -11,11 +11,14 @@ import usePartySocket from "partysocket/react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Dice6, Hand, Loader2, RefreshCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { DiceIcon, cn, drawGGConfetti, drawPigConfetti } from "@/lib/utils";
+import Confetti from "react-confetti";
 
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
   const [myId, setMyId] = useState<string>("");
+  const [showWinningConfetti, setShowWinningConfetti] = useState(false);
+  const [showLosingConfetti, setShowLosingConfetti] = useState(false);
 
   const socket = usePartySocket({
     host: PARTYKIT_HOST,
@@ -29,6 +32,14 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
 
       if (data.connectedPlayerId) {
         setMyId(data.connectedPlayerId);
+      }
+
+      if (data.gameState.winnerId !== undefined) {
+        if (data.gameState.winnerId === myId) {
+          setShowWinningConfetti(true);
+        } else {
+          setShowLosingConfetti(true);
+        }
       }
     },
   });
@@ -52,8 +63,31 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
 
   return (
     <div>
-      <div className="bg-blue-400 shadow-md rounded-lg my-8 flex flex-col items-center justify-center">
+      <div className="bg-blue-400 shadow-md rounded-lg mt-8 mb-4 flex flex-col items-center justify-center">
+        <div className="flex justify-between items-center p-4">
+          <h2 className="text-3xl font-bold text-white">
+            First to reach {gameState?.targetAmount} wins!
+          </h2>
+        </div>
         <div className="flex justify-between items-center w-full max-w-4xl p-4">
+          {showWinningConfetti && (
+            <Confetti
+              numberOfPieces={1500}
+              gravity={0.05}
+              drawShape={drawPigConfetti}
+              recycle={false}
+              onConfettiComplete={() => setShowWinningConfetti(false)}
+            />
+          )}
+          {showLosingConfetti && (
+            <Confetti
+              numberOfPieces={1000}
+              gravity={0.05}
+              drawShape={drawGGConfetti}
+              recycle={false}
+              onConfettiComplete={() => setShowLosingConfetti(false)}
+            />
+          )}
           {gameState &&
             Object.entries(gameState.players).map(
               ([playerId, playerState]: [PlayerId, PlayerState]) => (
@@ -66,7 +100,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
                   )}
                 >
                   <h2 className="text-4xl font-bold mb-4">
-                    {playerState.name}
+                    {playerState.name} {playerId === myId && "(You)"}
                   </h2>
                   <div className="text-9xl font-semibold">
                     {playerState.totalScore}
@@ -82,6 +116,9 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             )}
         </div>
       </div>
+      <div className="flex justify-center mb-4">
+        <DiceIcon lastRoll={gameState?.lastRoll} />
+      </div>
       <div className="flex flex-row justify-center">
         {isThereAWinner && (
           <div>
@@ -95,7 +132,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
               className="bg-green-500 hover:bg-green-500/90"
               onClick={handleRestart}
             >
-              <RefreshCcw className="mr-1 h-4 w-4" /> New Game!
+              <RefreshCcw className="mr-2" /> New Game!
             </Button>
           </div>
         )}
@@ -105,10 +142,10 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
               className="bg-green-500 hover:bg-green-500/90"
               onClick={handleRollDice}
             >
-              <Dice6 className="mr-1 h-4 w-4" /> Roll Dice!
+              <Dice6 className="mr-2" /> Roll Dice!
             </Button>
             <Button onClick={handleHold}>
-              <Hand className="mr-1 h-4 w-4" /> Hold!
+              <Hand className="mr-2" /> Hold!
             </Button>
           </div>
         )}
