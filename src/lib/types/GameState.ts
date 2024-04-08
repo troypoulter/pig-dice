@@ -8,6 +8,7 @@ export interface PlayerState {
 
 export interface GameState {
   targetAmount: number;
+  hasGameStarted: boolean;
   players: Record<PlayerId, PlayerState>;
   currentPlayerId: PlayerId;
   lastRoll?: number;

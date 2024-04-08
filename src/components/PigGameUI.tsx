@@ -136,7 +136,13 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             </Button>
           </div>
         )}
-        {isMyTurn && !isThereAWinner && (
+        {!gameState?.hasGameStarted && !isThereAWinner && (
+          <Button disabled aria-disabled={true}>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Waiting for players to join to start the game...
+          </Button>
+        )}
+        {gameState?.hasGameStarted && isMyTurn && !isThereAWinner && (
           <div className="flex flex-row gap-x-2">
             <Button
               className="bg-green-500 hover:bg-green-500/90"
@@ -149,7 +155,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             </Button>
           </div>
         )}
-        {!isMyTurn && !isThereAWinner && (
+        {gameState?.hasGameStarted && !isMyTurn && !isThereAWinner && (
           <Button disabled aria-disabled={true}>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Waiting for your turn...

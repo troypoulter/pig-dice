@@ -22,18 +22,23 @@ export default class PigGameServer implements Party.Server {
       console.log(`First player connected: ${connection.id}`);
     }
 
+    // await this.room.storage.put("gameState", gameState); // Persist game state changes
+
+    // this.room.broadcast(
+    //   JSON.stringify({ message: "Player joined the game", gameState })
+    // );
+
+    if (Object.keys(gameState.players).length === 2) {
+      console.log(`Second player connected: ${connection.id}`);
+      console.log("Game has started with 2 players.");
+      gameState.hasGameStarted = true;
+    }
+
     await this.room.storage.put("gameState", gameState); // Persist game state changes
 
     this.room.broadcast(
-      JSON.stringify({ message: "Player joined the game", gameState })
+      JSON.stringify({ message: "Game has started!", gameState })
     );
-
-    if (Object.keys(gameState.players).length === 2) {
-      console.log("Game has started with 2 players.");
-      this.room.broadcast(
-        JSON.stringify({ message: "Game has started!", gameState })
-      );
-    }
 
     connection.send(
       JSON.stringify({
@@ -44,11 +49,41 @@ export default class PigGameServer implements Party.Server {
     );
   }
 
+  async onClose(connection: Party.Connection) {
+    let gameState = await this.room.storage.get<GameState>("gameState");
+    if (!gameState) return; // Exit if game state is not found
+
+    // Check if the disconnecting player is part of the game
+    if (gameState.players[connection.id]) {
+      console.log(`Player has disconnected: ${connection.id}`);
+      delete gameState.players[connection.id]; // Remove the player from the game state
+
+      if (gameState.currentPlayerId === connection.id) {
+        // If the disconnecting player was the current player, switch to the next player
+        this.switchPlayer(gameState);
+      }
+
+      if (Object.keys(gameState.players).length <= 1) {
+        // If there are no more players, the game is over
+        gameState.hasGameStarted = false;
+        gameState.winnerId = Object.keys(gameState.players)[0];
+      }
+
+      await this.room.storage.put("gameState", gameState); // Persist the updated game state
+
+      // Notify remaining players about the update
+      this.room.broadcast(
+        JSON.stringify({ message: "Player left the game", gameState })
+      );
+    }
+  }
+
   async onRequest(req: Party.Request) {
     if (req.method === "POST") {
       let gameState = await this.room.storage.get<GameState>("gameState");
       if (!gameState) {
         gameState = {
+          hasGameStarted: false,
           targetAmount: process.env.NODE_ENV === "development" ? 5 : 50,
           players: {},
           currentPlayerId: "",
