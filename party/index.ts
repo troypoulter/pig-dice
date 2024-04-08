@@ -4,9 +4,12 @@ import type * as Party from "partykit/server";
 export default class PigGameServer implements Party.Server {
   constructor(readonly room: Party.Room) {}
 
+  async onError(connection: Party.Connection, error: Error) {}
+
   async onConnect(connection: Party.Connection) {
     let gameState = await this.room.storage.get<GameState>("gameState");
     if (!gameState || Object.keys(gameState.players).length >= 2) {
+      await connection.send(JSON.stringify({ message: "Game is full" }));
       connection.close();
       return;
     }

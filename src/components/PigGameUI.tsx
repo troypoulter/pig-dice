@@ -20,12 +20,22 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const [myId, setMyId] = useState<string>("");
   const [showWinningConfetti, setShowWinningConfetti] = useState(false);
   const [showLosingConfetti, setShowLosingConfetti] = useState(false);
+  const [gameFullMessage, setGameFullMessage] = useState("");
 
   const socket = usePartySocket({
     host: PARTYKIT_HOST,
     room: gameId,
     onMessage(event) {
       const data = JSON.parse(event.data);
+
+      if (data.message === "Game is full") {
+        setGameFullMessage(data.message);
+        socket.close();
+        // socket.updateProperties({
+        //   maxRetries: 0,
+        // });
+        return;
+      }
 
       if (data.gameState) {
         setGameState(data.gameState as GameState);
@@ -61,6 +71,10 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const isThereAWinner = gameState?.winnerId !== undefined;
   const currentPlayer = getPlayerState(gameState, myId);
   const winner = getPlayerState(gameState, gameState?.winnerId);
+
+  if (gameFullMessage) {
+    return <div>{gameFullMessage && <div>{gameFullMessage}</div>}</div>;
+  }
 
   return (
     <div>
