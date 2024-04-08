@@ -11,8 +11,9 @@ import usePartySocket from "partysocket/react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Dice6, Hand, Loader2, RefreshCcw } from "lucide-react";
-import { DiceIcon, cn, drawGGConfetti, drawPigConfetti } from "@/lib/utils";
+import { cn, drawGGConfetti, drawPigConfetti } from "@/lib/utils";
 import Confetti from "react-confetti";
+import { DiceIcon } from "@/lib/diceIcon";
 
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
@@ -63,7 +64,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
 
   return (
     <div>
-      <div className="bg-blue-400 shadow-md rounded-lg mt-8 mb-4 flex flex-col items-center justify-center">
+      <div className="bg-blue-400 shadow-md rounded-lg mt-8 mb-6 flex flex-col items-center justify-center">
         <div className="flex justify-between items-center p-4">
           <h2 className="text-3xl font-bold text-white">
             First to reach {gameState?.targetAmount} wins!
@@ -74,7 +75,6 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             <Confetti
               numberOfPieces={1500}
               gravity={0.05}
-              drawShape={drawPigConfetti}
               recycle={false}
               onConfettiComplete={() => setShowWinningConfetti(false)}
             />
@@ -83,7 +83,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             <Confetti
               numberOfPieces={1000}
               gravity={0.05}
-              drawShape={drawGGConfetti}
+              drawShape={drawPigConfetti}
               recycle={false}
               onConfettiComplete={() => setShowLosingConfetti(false)}
             />
@@ -156,36 +156,6 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           </Button>
         )}
       </div>
-    </div>
-  );
-
-  return (
-    <div>
-      <h3>Welcome {currentPlayer?.name}!</h3>
-      <pre>{JSON.stringify(gameState, null, 2)}</pre>
-      {isThereAWinner && (
-        <div>
-          <h3>Winner: {winner?.name}</h3>
-          <p>
-            {gameState?.winnerId === myId
-              ? "You won!"
-              : "Better luck next time!"}
-          </p>
-          <Button onClick={handleRestart}>New Game!</Button>
-        </div>
-      )}
-      {isMyTurn && !isThereAWinner && (
-        <div className="flex flex-row gap-x-2">
-          <Button onClick={handleRollDice}>Roll Dice!</Button>
-          <Button onClick={handleHold}>Hold!</Button>
-        </div>
-      )}
-      {!isMyTurn && !isThereAWinner && (
-        <Button disabled aria-disabled={true}>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Waiting for your turn...
-        </Button>
-      )}
     </div>
   );
 }

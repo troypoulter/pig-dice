@@ -1,19 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
-import {
-  Dice1,
-  Dice2,
-  Dice3,
-  Dice4,
-  Dice5,
-  Dice6,
-  LucideIcon,
-  Square,
-} from "lucide-react";
 import { twMerge } from "tailwind-merge";
-
-type DiceIconsType = {
-  [key: string]: LucideIcon;
-};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -72,25 +58,4 @@ export const drawGGConfetti = (ctx: CanvasRenderingContext2D) => {
   ctx.fillStyle = "#FFC0CB"; // Set a nice shade of pink for the letters
   ctx.fillText("GG", 0, 10); // Draw the "GG" at the desired position
   ctx.closePath(); // Close the path
-};
-
-type DiceIconProps = {
-  lastRoll?: number;
-};
-
-export const DiceIcon: React.FC<DiceIconProps> = ({ lastRoll }) => {
-  if (!lastRoll) return <Square size={96} />;
-
-  const diceIcons: DiceIconsType = {
-    "1": Dice1,
-    "2": Dice2,
-    "3": Dice3,
-    "4": Dice4,
-    "5": Dice5,
-    "6": Dice6,
-  };
-
-  const DiceIcon = diceIcons[lastRoll.toString()] || Square;
-
-  return <DiceIcon size={96} />;
 };
