@@ -42,7 +42,8 @@ export default function Home() {
               type="submit"
               className="bg-green-500 hover:bg-green-500/90"
             >
-              <Play className="mr-1 h-4 w-4" /> Play Now
+              <Play size={22} className="mr-2" />
+              Play Now
             </Button>
           </form>
         </PageActions>

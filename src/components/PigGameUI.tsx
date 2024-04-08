@@ -143,13 +143,13 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
               className="bg-green-500 hover:bg-green-500/90"
               onClick={handleRestart}
             >
-              <RefreshCcw className="mr-2" /> New Game!
+              <RefreshCcw size={22} className="mr-2" /> New Game!
             </Button>
           </div>
         )}
         {!gameState?.hasGameStarted && !isThereAWinner && (
           <Button disabled aria-disabled={true}>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 size={22} className="mr-2 animate-spin" />
             Waiting for players to join to start the game...
           </Button>
         )}
@@ -159,16 +159,16 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
               className="bg-green-500 hover:bg-green-500/90"
               onClick={handleRollDice}
             >
-              <Dice6 className="mr-2" /> Roll Dice!
+              <Dice6 size={22} className="mr-2" /> Roll Dice!
             </Button>
             <Button onClick={handleHold}>
-              <Hand className="mr-2" /> Hold!
+              <Hand size={22} className="mr-2" /> Hold!
             </Button>
           </div>
         )}
         {gameState?.hasGameStarted && !isMyTurn && !isThereAWinner && (
           <Button disabled aria-disabled={true}>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 size={22} className="mr-2 animate-spin" />
             Waiting for your turn...
           </Button>
         )}
