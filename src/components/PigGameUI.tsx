@@ -31,9 +31,6 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
       if (data.message === "Game is full") {
         setGameFullMessage(data.message);
         socket.close();
-        // socket.updateProperties({
-        //   maxRetries: 0,
-        // });
         return;
       }
 
