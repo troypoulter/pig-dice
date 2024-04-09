@@ -1,3 +1,5 @@
+"use server";
+
 import {
   PageHeader,
   PageHeaderHeading,
@@ -8,7 +10,7 @@ import { CreateGameForm } from "./_components/CreateGameForm";
 
 const randomId = () => Math.random().toString(36).substring(2, 15);
 
-export default function Home() {
+export default async function Home() {
   return (
     <div>
       <PageHeader>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -44,6 +45,10 @@ export function CreateGameForm() {
     <Card className="w-[560px]">
       <CardHeader className="items-center">
         <CardTitle>Create Game</CardTitle>
+        <CardDescription>
+          Quickly customise the game to your liking - then dive into the dice
+          duel!
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form action={createGameRoom}>
