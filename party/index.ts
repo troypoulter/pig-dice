@@ -87,7 +87,7 @@ export default class PigGameServer implements Party.Server {
       if (!gameState) {
         gameState = {
           hasGameStarted: false,
-          targetAmount: process.env.NODE_ENV === "development" ? 5 : 50,
+          targetAmount: 50,
           players: {},
           currentPlayerId: "",
         }; // Initialize the game state
