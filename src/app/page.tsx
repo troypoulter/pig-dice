@@ -4,30 +4,11 @@ import {
   PageHeaderDescription,
   PageActions,
 } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { PARTYKIT_URL } from "@/lib/env";
-import { redirect } from "next/navigation";
+import { CreateGameForm } from "./_components/CreateGameForm";
 
 const randomId = () => Math.random().toString(36).substring(2, 15);
 
 export default function Home() {
-  async function createGameRoom() {
-    "use server";
-
-    const id = randomId();
-
-    await fetch(`${PARTYKIT_URL}/parties/main/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    redirect(`/play/${id}`);
-  }
-
   return (
     <div>
       <PageHeader>
@@ -37,23 +18,9 @@ export default function Home() {
           every roll can lead to victory or defeat!
         </PageHeaderDescription>
         <PageActions>
-          <form action={createGameRoom}>
-            <Button
-              type="submit"
-              className="bg-green-500 hover:bg-green-500/90"
-            >
-              <Play size={22} className="mr-2" />
-              Play Now
-            </Button>
-          </form>
+          <CreateGameForm />
         </PageActions>
       </PageHeader>
-      <Separator />
-      <div className="flex flex-col items-center mt-8">
-        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight">
-          How to play
-        </h2>
-      </div>
     </div>
   );
 }
