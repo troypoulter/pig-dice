@@ -2,6 +2,13 @@
 
 import { createGameRoom } from "@/actions/createGameRoom";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Loader2, Play } from "lucide-react";
 import { useFormStatus } from "react-dom";
@@ -14,7 +21,7 @@ function CreateGameButton() {
       type="submit"
       aria-disabled={pending}
       className={cn(
-        "bg-green-500 hover:bg-green-500/90",
+        "w-full bg-green-500 hover:bg-green-500/90",
         pending && "opacity-50"
       )}
     >
@@ -34,8 +41,15 @@ function CreateGameButton() {
 
 export function CreateGameForm() {
   return (
-    <form action={createGameRoom}>
-      <CreateGameButton />
-    </form>
+    <Card className="w-[560px]">
+      <CardHeader className="items-center">
+        <CardTitle>Create Game</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form action={createGameRoom}>
+          <CreateGameButton />
+        </form>
+      </CardContent>
+    </Card>
   );
 }
