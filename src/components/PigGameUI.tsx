@@ -86,14 +86,23 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
     return <div>{gameFullMessage && <div>{gameFullMessage}</div>}</div>;
   }
 
+  if (!gameState) {
+    return (
+      <div>
+        <Loader2 size={22} className="mr-2 animate-spin" />
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="bg-blue-400 shadow-md rounded-lg mt-8 mb-6 flex flex-col items-center justify-center">
         <div className="flex justify-between items-center p-4">
           <h2 className="text-3xl font-bold text-white">
-            First to reach {gameState?.targetAmount} wins!{" "}
-            {gameState ? Object.keys(gameState.players).length : 0}/
-            {gameState?.maxPlayers} players joined
+            First to reach {gameState.targetAmount} wins!{" "}
+            {Object.keys(gameState.players).length}/{gameState.maxPlayers}{" "}
+            players joined
           </h2>
         </div>
         <div className="flex justify-between items-center w-full max-w-4xl p-4">
@@ -114,40 +123,38 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
               onConfettiComplete={() => setShowLosingConfetti(false)}
             />
           )}
-          {gameState &&
-            Object.entries(gameState.players).map(
-              ([playerId, playerState]: [PlayerId, PlayerState]) => (
-                <div
-                  key={playerId}
-                  className={cn(
-                    "text-white text-center p-4",
-                    playerId === gameState.currentPlayerId &&
-                      "bg-green-500 rounded-md"
-                  )}
-                >
-                  <h2 className="text-4xl font-bold mb-4">
-                    {playerState.name} {playerId === myId && "(You)"}
-                  </h2>
-                  <div className="text-9xl font-semibold">
-                    {playerState.totalScore}
-                  </div>
-                  <div className="bg-blue-300 text-white text-center py-4 px-8 mt-4 rounded-lg">
-                    <h2 className="text-xl font-bold">CURRENT</h2>
-                    <p className="text-5xl font-semibold">
-                      {playerState.currentScore}
-                    </p>
-                  </div>
+          {Object.entries(gameState.players).map(
+            ([playerId, playerState]: [PlayerId, PlayerState]) => (
+              <div
+                key={playerId}
+                className={cn(
+                  "text-white text-center p-4",
+                  playerId === gameState.currentPlayerId &&
+                    "bg-green-500 rounded-md"
+                )}
+              >
+                <h2 className="text-4xl font-bold mb-4">
+                  {playerState.name} {playerId === myId && "(You)"}
+                </h2>
+                <div className="text-9xl font-semibold">
+                  {playerState.totalScore}
                 </div>
-              )
-            )}
+                <div className="bg-blue-300 text-white text-center py-4 px-8 mt-4 rounded-lg">
+                  <h2 className="text-xl font-bold">CURRENT</h2>
+                  <p className="text-5xl font-semibold">
+                    {playerState.currentScore}
+                  </p>
+                </div>
+              </div>
+            )
+          )}
         </div>
       </div>
       <div className="flex justify-center mb-4">
-        <DiceIcon lastRoll={gameState?.lastRoll} increment={increment} />
+        <DiceIcon lastRoll={gameState.lastRoll} increment={increment} />
       </div>
       <div className="flex flex-row justify-center">
-        {gameState &&
-          !gameState.hasGameStarted &&
+        {!gameState.hasGameStarted &&
           Object.keys(gameState.players).length >= 2 && (
             <Button
               className="bg-green-500 hover:bg-green-500/90"
@@ -172,8 +179,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             </Button>
           </div>
         )}
-        {gameState &&
-          !gameState.hasGameStarted &&
+        {!gameState.hasGameStarted &&
           Object.keys(gameState.players).length < 2 &&
           !isThereAWinner && (
             <Button disabled aria-disabled={true}>
@@ -181,7 +187,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
               Waiting for players to join to start the game...
             </Button>
           )}
-        {gameState?.hasGameStarted && isMyTurn && !isThereAWinner && (
+        {gameState.hasGameStarted && isMyTurn && !isThereAWinner && (
           <div className="flex flex-row gap-x-2">
             <Button
               className="bg-green-500 hover:bg-green-500/90"
@@ -194,7 +200,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             </Button>
           </div>
         )}
-        {gameState?.hasGameStarted && !isMyTurn && !isThereAWinner && (
+        {gameState.hasGameStarted && !isMyTurn && !isThereAWinner && (
           <Button disabled aria-disabled={true}>
             <Loader2 size={22} className="mr-2 animate-spin" />
             Waiting for your turn...
