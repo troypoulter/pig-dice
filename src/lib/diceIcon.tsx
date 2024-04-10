@@ -17,9 +17,10 @@ type DiceIconsType = {
 
 type DiceIconProps = {
   lastRoll?: number;
+  increment: number;
 };
 
-export const DiceIcon: React.FC<DiceIconProps> = ({ lastRoll }) => {
+export const DiceIcon: React.FC<DiceIconProps> = ({ lastRoll, increment }) => {
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export const DiceIcon: React.FC<DiceIconProps> = ({ lastRoll }) => {
       const timer = setTimeout(() => setShake(false), 600); // Match this duration with your CSS animation
       return () => clearTimeout(timer);
     }
-  }, [lastRoll]);
+  }, [lastRoll, increment]);
 
   if (!lastRoll) return <BoxSelect size={96} />;
 

@@ -21,6 +21,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const [showWinningConfetti, setShowWinningConfetti] = useState(false);
   const [showLosingConfetti, setShowLosingConfetti] = useState(false);
   const [gameFullMessage, setGameFullMessage] = useState("");
+  const [increment, setIncrement] = useState(0);
 
   const socket = usePartySocket({
     host: PARTYKIT_HOST,
@@ -36,6 +37,14 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
 
       if (data.gameState) {
         setGameState(data.gameState as GameState);
+
+        if (data.gameState.winnerId === undefined) {
+          // Increasing this abritrary increment will ensure the dice roll animation happens
+          // when the `lastRoll` is the same value i.e. rolling two 6's in a row.
+          // We don't want to trigger the animation when there is a winner though, so only
+          // do it when there is no winner.
+          setIncrement(increment + 1);
+        }
       }
 
       if (data.connectedPlayerId) {
@@ -128,7 +137,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         </div>
       </div>
       <div className="flex justify-center mb-4">
-        <DiceIcon lastRoll={gameState?.lastRoll} />
+        <DiceIcon lastRoll={gameState?.lastRoll} increment={increment} />
       </div>
       <div className="flex flex-row justify-center">
         {isThereAWinner && (

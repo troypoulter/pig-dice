@@ -87,7 +87,7 @@ export default class PigGameServer implements Party.Server {
       if (!gameState) {
         gameState = {
           hasGameStarted: false,
-          targetAmount: 50,
+          targetAmount: 5,
           players: {},
           currentPlayerId: "",
         }; // Initialize the game state
