@@ -1,3 +1,4 @@
+import { createGameSchema } from "@/app/_components/createGameSchema";
 import { GameState } from "@/lib/types/GameState";
 import type * as Party from "partykit/server";
 
@@ -8,7 +9,10 @@ export default class PigGameServer implements Party.Server {
 
   async onConnect(connection: Party.Connection) {
     let gameState = await this.room.storage.get<GameState>("gameState");
-    if (!gameState || Object.keys(gameState.players).length >= 2) {
+    if (
+      !gameState ||
+      Object.keys(gameState.players).length >= gameState.maxPlayers
+    ) {
       await connection.send(JSON.stringify({ message: "Game is full" }));
       connection.close();
       return;
@@ -31,11 +35,11 @@ export default class PigGameServer implements Party.Server {
     //   JSON.stringify({ message: "Player joined the game", gameState })
     // );
 
-    if (Object.keys(gameState.players).length === 2) {
-      console.log(`Second player connected: ${connection.id}`);
-      console.log("Game has started with 2 players.");
-      gameState.hasGameStarted = true;
-    }
+    // if (Object.keys(gameState.players).length === gameState.maxPlayers) {
+    //   console.log(`Second player connected: ${connection.id}`);
+    //   console.log(`Game has started with ${gameState.maxPlayers} players.`);
+    //   gameState.hasGameStarted = true;
+    // }
 
     await this.room.storage.put("gameState", gameState); // Persist game state changes
 
@@ -83,11 +87,28 @@ export default class PigGameServer implements Party.Server {
 
   async onRequest(req: Party.Request) {
     if (req.method === "POST") {
+      const body = await req.json();
+      const newGame = createGameSchema.safeParse(body);
+
+      if (!newGame.success) {
+        console.log(
+          "Invalid request - Game creation failed",
+          newGame.error.message
+        );
+        return new Response(
+          `Invalid request - Game creation failed: ${newGame.error.message}`,
+          {
+            status: 400,
+          }
+        );
+      }
+
       let gameState = await this.room.storage.get<GameState>("gameState");
       if (!gameState) {
         gameState = {
           hasGameStarted: false,
-          targetAmount: 5,
+          targetAmount: newGame.data.targetScore,
+          maxPlayers: newGame.data.numberOfPlayers,
           players: {},
           currentPlayerId: "",
         }; // Initialize the game state
@@ -123,6 +144,15 @@ export default class PigGameServer implements Party.Server {
     if (!gameState) return; // Exit if game state is not found
 
     const event = JSON.parse(message);
+
+    if (event.type === "start") {
+      if (gameState.hasGameStarted) return; // Exit if the game is already started
+      gameState.hasGameStarted = true;
+      await this.room.storage.put("gameState", gameState); // Persist game state changes
+      this.room.broadcast(
+        JSON.stringify({ message: "Game has started!", gameState })
+      );
+    }
 
     if (event.type === "roll" && sender.id === gameState.currentPlayerId) {
       if (gameState.winnerId) return; // Exit if the game is already over.

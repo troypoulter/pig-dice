@@ -10,7 +10,7 @@ import {
 import usePartySocket from "partysocket/react";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Dice6, Hand, Loader2, RefreshCcw } from "lucide-react";
+import { Dice6, Hand, Loader2, RefreshCcw, Play } from "lucide-react";
 import { cn, drawPigConfetti } from "@/lib/utils";
 import Confetti from "react-confetti";
 import { DiceIcon } from "@/lib/diceIcon";
@@ -73,6 +73,10 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
     socket.send(JSON.stringify({ type: "restart" }));
   };
 
+  const handleStart = () => {
+    socket.send(JSON.stringify({ type: "start" }));
+  };
+
   const isMyTurn = myId === gameState?.currentPlayerId;
   const isThereAWinner = gameState?.winnerId !== undefined;
   const currentPlayer = getPlayerState(gameState, myId);
@@ -87,7 +91,9 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
       <div className="bg-blue-400 shadow-md rounded-lg mt-8 mb-6 flex flex-col items-center justify-center">
         <div className="flex justify-between items-center p-4">
           <h2 className="text-3xl font-bold text-white">
-            First to reach {gameState?.targetAmount} wins!
+            First to reach {gameState?.targetAmount} wins!{" "}
+            {gameState ? Object.keys(gameState.players).length : 0}/
+            {gameState?.maxPlayers} players joined
           </h2>
         </div>
         <div className="flex justify-between items-center w-full max-w-4xl p-4">
@@ -140,6 +146,16 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         <DiceIcon lastRoll={gameState?.lastRoll} increment={increment} />
       </div>
       <div className="flex flex-row justify-center">
+        {gameState &&
+          !gameState.hasGameStarted &&
+          Object.keys(gameState.players).length >= 2 && (
+            <Button
+              className="bg-green-500 hover:bg-green-500/90"
+              onClick={handleStart}
+            >
+              <Play size={22} className="mr-2" /> Start Game!
+            </Button>
+          )}
         {isThereAWinner && (
           <div>
             <h3>Winner: {winner?.name}</h3>
@@ -156,12 +172,15 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             </Button>
           </div>
         )}
-        {!gameState?.hasGameStarted && !isThereAWinner && (
-          <Button disabled aria-disabled={true}>
-            <Loader2 size={22} className="mr-2 animate-spin" />
-            Waiting for players to join to start the game...
-          </Button>
-        )}
+        {gameState &&
+          !gameState.hasGameStarted &&
+          Object.keys(gameState.players).length < 2 &&
+          !isThereAWinner && (
+            <Button disabled aria-disabled={true}>
+              <Loader2 size={22} className="mr-2 animate-spin" />
+              Waiting for players to join to start the game...
+            </Button>
+          )}
         {gameState?.hasGameStarted && isMyTurn && !isThereAWinner && (
           <div className="flex flex-row gap-x-2">
             <Button
