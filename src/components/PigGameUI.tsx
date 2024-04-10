@@ -11,7 +11,7 @@ import usePartySocket from "partysocket/react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Dice6, Hand, Loader2, RefreshCcw } from "lucide-react";
-import { cn, drawGGConfetti, drawPigConfetti } from "@/lib/utils";
+import { cn, drawPigConfetti } from "@/lib/utils";
 import Confetti from "react-confetti";
 import { DiceIcon } from "@/lib/diceIcon";
 
@@ -93,16 +93,16 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         <div className="flex justify-between items-center w-full max-w-4xl p-4">
           {showWinningConfetti && (
             <Confetti
-              numberOfPieces={500}
-              gravity={0.05}
+              numberOfPieces={350}
+              gravity={0.075}
               recycle={false}
               onConfettiComplete={() => setShowWinningConfetti(false)}
             />
           )}
           {showLosingConfetti && (
             <Confetti
-              numberOfPieces={500}
-              gravity={0.05}
+              numberOfPieces={350}
+              gravity={0.075}
               drawShape={drawPigConfetti}
               recycle={false}
               onConfettiComplete={() => setShowLosingConfetti(false)}

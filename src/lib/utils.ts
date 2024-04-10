@@ -7,12 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 
 export const drawPigConfetti = (context: CanvasRenderingContext2D) => {
   // Scale factor to make the pig face larger
-  const scale = 1;
+  const scale = 2.5;
   const size = 10 * scale;
-  const earSize = size / 4;
-  const eyeSize = size / 20;
-  const noseWidth = size / 2; // Increase nose width
-  const noseHeight = size / 3; // Increase nose height
+  const earSize = size / 2;
+  const eyeSize = size / 10;
+  const noseWidth = size / 1; // Increase nose width
+  const noseHeight = size / 2; // Increase nose height
 
   // Head
   context.beginPath();
@@ -50,12 +50,4 @@ export const drawPigConfetti = (context: CanvasRenderingContext2D) => {
   context.arc(-size / 3, -size / 3, eyeSize, 0, Math.PI * 2, true); // Left eye
   context.arc(size / 3, -size / 3, eyeSize, 0, Math.PI * 2, true); // Right eye
   context.fill();
-};
-
-export const drawGGConfetti = (ctx: CanvasRenderingContext2D) => {
-  ctx.beginPath(); // Begin a new path for the "GG" shape
-  ctx.font = "bold 30px Comic Sans MS"; // Set the font size and style
-  ctx.fillStyle = "#FFC0CB"; // Set a nice shade of pink for the letters
-  ctx.fillText("GG", 0, 10); // Draw the "GG" at the desired position
-  ctx.closePath(); // Close the path
 };
