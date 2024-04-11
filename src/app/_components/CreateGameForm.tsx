@@ -120,7 +120,7 @@ export function CreateGameForm() {
               name="numberOfPlayers"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Number of Players (2-16)</FormLabel>
+                  <FormLabel>Number of Players (2-8)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

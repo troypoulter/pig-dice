@@ -18,8 +18,15 @@ export default class PigGameServer implements Party.Server {
       return;
     }
 
+    // Increment this each time a new player connects, so if
+    // someone joins after another person leaves, it keeps increasing the number.
+    gameState.totalJoinedPlayers += 1;
+
     gameState.players[connection.id] = {
-      name: `Player ${Object.keys(gameState.players).length + 1}`,
+      // Trying out generating a unique fun name instead of named player.
+      // Keeping this here for easy reference later.
+      // name: `Player ${gameState.totalJoinedPlayers}`,
+      name: generateFunName(),
       totalScore: 0,
       currentScore: 0,
     };
@@ -55,15 +62,30 @@ export default class PigGameServer implements Party.Server {
       console.log(`Player has disconnected: ${connection.id}`);
       delete gameState.players[connection.id]; // Remove the player from the game state
 
-      if (gameState.currentPlayerId === connection.id) {
-        // If the disconnecting player was the current player, switch to the next player
-        this.switchPlayer(gameState);
+      // Remove the player from the order array if it exists and update currentPlayerIndex
+      if (gameState.playerOrder) {
+        const indexToRemove = gameState.playerOrder.indexOf(connection.id);
+        gameState.playerOrder = gameState.playerOrder.filter(
+          (id) => id !== connection.id
+        );
+
+        // Adjust the currentPlayerIndex if necessary
+        if (indexToRemove > -1) {
+          if (gameState.currentPlayerIndex > indexToRemove) {
+            gameState.currentPlayerIndex -= 1;
+          } else if (gameState.currentPlayerIndex === indexToRemove) {
+            // If the disconnecting player was the current player, adjust the index and switch player
+            gameState.currentPlayerIndex %= gameState.playerOrder.length;
+            this.switchPlayer(gameState);
+          }
+        }
       }
 
       if (Object.keys(gameState.players).length <= 1) {
         // If there are no more players, the game is over
+        console.log("only one player left, select the winner!");
         gameState.hasGameStarted = false;
-        gameState.winnerId = Object.keys(gameState.players)[0];
+        gameState.winnerId = Object.keys(gameState.players)[0]; // Automatically declare the remaining player as the winner
       }
 
       await this.room.storage.put("gameState", gameState); // Persist the updated game state
@@ -99,6 +121,7 @@ export default class PigGameServer implements Party.Server {
           hasGameStarted: false,
           targetAmount: newGame.data.targetScore,
           maxPlayers: newGame.data.numberOfPlayers,
+          totalJoinedPlayers: 0,
           players: {},
           playerOrder: [],
           currentPlayerIndex: 0,
@@ -217,6 +240,33 @@ export default class PigGameServer implements Party.Server {
     // Persist the updated game state with the new current player.
     await this.room.storage.put("gameState", gameState);
   }
+}
+
+const adjectives = [
+  "Crazy",
+  "Happy",
+  "Silly",
+  "Lazy",
+  "Jumpy",
+  "Wild",
+  "Quick",
+  "Brave",
+];
+const nouns = [
+  "Panda",
+  "Banana",
+  "Rocket",
+  "Wizard",
+  "Ninja",
+  "Pirate",
+  "Robot",
+  "Monster",
+];
+
+function generateFunName() {
+  const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const noun = nouns[Math.floor(Math.random() * nouns.length)];
+  return `${adj} ${noun}`;
 }
 
 PigGameServer satisfies Party.Worker;

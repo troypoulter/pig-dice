@@ -10,6 +10,7 @@ export interface GameState {
   targetAmount: number;
   hasGameStarted: boolean;
   maxPlayers: number;
+  totalJoinedPlayers: number;
   players: Record<PlayerId, PlayerState>;
   playerOrder: PlayerId[];
   currentPlayerIndex: number;
