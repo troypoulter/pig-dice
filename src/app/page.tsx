@@ -8,8 +8,6 @@ import {
 } from "@/components/page-header";
 import { CreateGameForm } from "./_components/CreateGameForm";
 
-const randomId = () => Math.random().toString(36).substring(2, 15);
-
 export default async function Home() {
   return (
     <div>
