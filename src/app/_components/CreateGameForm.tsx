@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -120,7 +119,7 @@ export function CreateGameForm() {
               name="numberOfPlayers"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Number of Players (2-8)</FormLabel>
+                  <FormLabel>Number of Players (2-6)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

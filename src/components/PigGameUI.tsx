@@ -99,14 +99,14 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   return (
     <div>
       <div className="mb-6 flex flex-col items-center justify-center">
-        <div className="flex justify-between items-center p-4 mb-4">
-          <h2 className="text-3xl font-bold">
+        <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg bg-blue-100">
+          <h2 className="text-xl md:text-3xl font-bold">
             First to reach {gameState.targetAmount} wins!{" "}
             {Object.keys(gameState.players).length}/{gameState.maxPlayers}{" "}
             players joined
           </h2>
         </div>
-        <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-2 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
           {showWinningConfetti && (
             <Confetti
               numberOfPieces={350}
@@ -194,14 +194,14 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           </Button>
         )}
       </div>
-      {process.env.NODE_ENV === "development" && (
-        <pre className="mx-auto w-[540px] mt-4 rounded-md bg-slate-950 p-4">
+      {/* {process.env.NODE_ENV === "development" && (
+        <pre className="mx-auto mt-4 rounded-md bg-slate-950 p-4">
           <div className="text-white mb-2 font-bold">Dev Mode: Game State</div>
-          <code className="text-white text-sm">
+          <code className="text-white text-sm text-wrap">
             {JSON.stringify(gameState, null, 2)}
           </code>
         </pre>
-      )}
+      )} */}
     </div>
   );
 }

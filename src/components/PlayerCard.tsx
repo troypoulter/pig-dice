@@ -22,7 +22,7 @@ export function PlayerCard({
     <Card
       key={playerId}
       className={cn(
-        "flex flex-col items-center justify-center p-4",
+        "flex flex-col items-center justify-center p-2 sm:p-4",
         playerId === gameState.currentPlayerId && "bg-green-300"
       )}
     >
@@ -41,13 +41,13 @@ export function PlayerCard({
         )}
       </div>
       <div className="flex flex-row items-center justify-center space-x-2">
-        <h2 className="text-3xl font-semibold text-wrap">{playerState.name}</h2>
+        <h2 className="text-xl font-semibold text-wrap">{playerState.name}</h2>
       </div>
-      <div className="text-7xl mt-4 font-bold">{playerState.totalScore}</div>
-      <div className="bg-green-500 text-white text-center py-4 px-8 mt-4 rounded-lg">
-        <div className="text-lg font-medium">CURRENT</div>
-        <div className="text-4xl font-semibold">{playerState.currentScore}</div>
-      </div>
+      <div className="text-5xl mt-2 font-bold">{playerState.totalScore}</div>
+      {/* <div className="bg-green-500 text-white text-center py-2 px-4 mt-2 rounded-lg">
+        <div className="text-md font-medium">CURRENT</div>
+        <div className="text-3xl font-semibold">{playerState.currentScore}</div>
+      </div> */}
     </Card>
   );
 }
