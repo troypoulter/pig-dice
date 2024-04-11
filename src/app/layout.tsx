@@ -4,6 +4,7 @@ import "./globals.css";
 import PlausibleProvider from "next-plausible";
 import { Footer } from "./_components/footer";
 import { Navbar } from "./_components/navbar";
+import ScreenSizeIndicator from "@/components/screen-size-indicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -71,6 +72,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </div>
+        <ScreenSizeIndicator />
       </body>
     </html>
   );
