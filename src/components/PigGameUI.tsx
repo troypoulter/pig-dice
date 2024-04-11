@@ -14,6 +14,7 @@ import { Dice6, Hand, Loader2, RefreshCcw, Play } from "lucide-react";
 import { cn, drawPigConfetti } from "@/lib/utils";
 import Confetti from "react-confetti";
 import { DiceIcon } from "@/lib/diceIcon";
+import { PlayerCard } from "./PlayerCard";
 
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
@@ -97,15 +98,15 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
 
   return (
     <div>
-      <div className="bg-blue-400 shadow-md rounded-lg mt-8 mb-6 flex flex-col items-center justify-center">
+      <div className="mb-6 flex flex-col items-center justify-center">
         <div className="flex justify-between items-center p-4">
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-3xl font-bold">
             First to reach {gameState.targetAmount} wins!{" "}
             {Object.keys(gameState.players).length}/{gameState.maxPlayers}{" "}
             players joined
           </h2>
         </div>
-        <div className="flex justify-between items-center w-full max-w-4xl p-4">
+        <div className="grid grid-cols-4 justify-between items-center w-full p-4">
           {showWinningConfetti && (
             <Confetti
               numberOfPieces={350}
@@ -125,27 +126,13 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           )}
           {Object.entries(gameState.players).map(
             ([playerId, playerState]: [PlayerId, PlayerState]) => (
-              <div
+              <PlayerCard
+                gameState={gameState}
+                myId={myId}
+                playerState={playerState}
                 key={playerId}
-                className={cn(
-                  "text-white text-center p-4",
-                  playerId === gameState.currentPlayerId &&
-                    "bg-green-500 rounded-md"
-                )}
-              >
-                <h2 className="text-4xl font-bold mb-4">
-                  {playerState.name} {playerId === myId && "(You)"}
-                </h2>
-                <div className="text-9xl font-semibold">
-                  {playerState.totalScore}
-                </div>
-                <div className="bg-blue-300 text-white text-center py-4 px-8 mt-4 rounded-lg">
-                  <h2 className="text-xl font-bold">CURRENT</h2>
-                  <p className="text-5xl font-semibold">
-                    {playerState.currentScore}
-                  </p>
-                </div>
-              </div>
+                playerId={playerId}
+              />
             )
           )}
         </div>
