@@ -24,22 +24,12 @@ export default class PigGameServer implements Party.Server {
       currentScore: 0,
     };
 
+    gameState.playerOrder.push(connection.id);
+
     if (Object.keys(gameState.players).length === 1) {
       gameState.currentPlayerId = connection.id;
       console.log(`First player connected: ${connection.id}`);
     }
-
-    // await this.room.storage.put("gameState", gameState); // Persist game state changes
-
-    // this.room.broadcast(
-    //   JSON.stringify({ message: "Player joined the game", gameState })
-    // );
-
-    // if (Object.keys(gameState.players).length === gameState.maxPlayers) {
-    //   console.log(`Second player connected: ${connection.id}`);
-    //   console.log(`Game has started with ${gameState.maxPlayers} players.`);
-    //   gameState.hasGameStarted = true;
-    // }
 
     await this.room.storage.put("gameState", gameState); // Persist game state changes
 
@@ -110,7 +100,11 @@ export default class PigGameServer implements Party.Server {
           targetAmount: newGame.data.targetScore,
           maxPlayers: newGame.data.numberOfPlayers,
           players: {},
+          playerOrder: [],
+          currentPlayerIndex: 0,
           currentPlayerId: "",
+          lastRoll: undefined,
+          winnerId: undefined,
         }; // Initialize the game state
         console.log("New game room created");
         await this.room.storage.put("gameState", gameState); // Persist the new game state
@@ -212,11 +206,16 @@ export default class PigGameServer implements Party.Server {
   }
 
   private async switchPlayer(gameState: GameState) {
-    const playerIds = Object.keys(gameState.players);
-    gameState.currentPlayerId = playerIds.find(
-      (id) => id !== gameState.currentPlayerId
-    )!;
-    await this.room.storage.put("gameState", gameState); // Ensure to persist any changes made during the switch
+    // Increment the current player index.
+    gameState.currentPlayerIndex =
+      (gameState.currentPlayerIndex + 1) % gameState.playerOrder.length;
+
+    // Update the current player ID using the playerOrder array.
+    gameState.currentPlayerId =
+      gameState.playerOrder[gameState.currentPlayerIndex];
+
+    // Persist the updated game state with the new current player.
+    await this.room.storage.put("gameState", gameState);
   }
 }
 

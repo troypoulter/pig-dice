@@ -11,6 +11,8 @@ export interface GameState {
   hasGameStarted: boolean;
   maxPlayers: number;
   players: Record<PlayerId, PlayerState>;
+  playerOrder: PlayerId[];
+  currentPlayerIndex: number;
   currentPlayerId: PlayerId;
   lastRoll?: number;
   winnerId?: PlayerId;
