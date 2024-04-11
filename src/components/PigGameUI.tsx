@@ -106,7 +106,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             players joined
           </h2>
         </div>
-        <div className="grid grid-cols-4 gap-4 justify-between items-center w-full p-4">
+        <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {showWinningConfetti && (
             <Confetti
               numberOfPieces={350}
