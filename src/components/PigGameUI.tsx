@@ -17,11 +17,13 @@ import {
   RefreshCcw,
   Play,
   UsersRound,
+  Link,
 } from "lucide-react";
 import { cn, drawPigConfetti } from "@/lib/utils";
 import Confetti from "react-confetti";
 import { DiceIcon } from "@/lib/diceIcon";
 import { PlayerCard } from "./PlayerCard";
+import InviteButton from "./InviteButton";
 
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
@@ -207,8 +209,9 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           </Button>
         )}
       </div>
-      <div className="flex justify-center mt-4">
-        <UsersRound size={22} className="mr-2" />{" "}
+      <div className="flex justify-center items-center mt-4">
+        <InviteButton />
+        <UsersRound size={22} className="mx-2" />{" "}
         {Object.keys(gameState.players).length}/{gameState.maxPlayers} players
         connected
       </div>
