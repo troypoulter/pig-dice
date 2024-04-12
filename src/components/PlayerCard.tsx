@@ -24,7 +24,7 @@ export function PlayerCard({
       key={playerId}
       className={cn(
         "flex flex-col items-center justify-center p-2 sm:p-4",
-        playerId === gameState.currentPlayerId && "bg-green-300"
+        playerId === gameState.currentPlayerId && "bg-green-200"
       )}
     >
       <div className="flex flex-col">
@@ -44,7 +44,16 @@ export function PlayerCard({
       <div className="flex flex-row items-center justify-center space-x-2">
         <h2 className="text-xl font-semibold text-wrap">{playerState.name}</h2>
       </div>
-      <div className="text-5xl my-2 font-bold">{playerState.totalScore}</div>
+      <div
+        className={cn(
+          "text-5xl my-2 font-bold",
+          playerState.currentScore > 0 && "text-green-500"
+        )}
+      >
+        {playerState.currentScore > 0
+          ? playerState.totalScore + playerState.currentScore
+          : playerState.totalScore}
+      </div>
       <Progress
         value={
           playerState.currentScore > 0

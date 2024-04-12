@@ -18,11 +18,7 @@ export default function InviteButton() {
   };
 
   return (
-    <Button
-      size="sm"
-      className="bg-blue-500 hover:bg-blue-500/90"
-      onClick={handleCopy}
-    >
+    <Button size="sm" variant="outline" onClick={handleCopy}>
       {buttonText === "Copied!" ? (
         <Check size={22} className="mr-2" />
       ) : (

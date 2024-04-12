@@ -108,13 +108,11 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   return (
     <div>
       <div className="mb-6 flex flex-col items-center justify-center">
-        {/* <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg bg-blue-100">
+        <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg bg-blue-100">
           <h2 className="text-xl md:text-3xl font-bold">
-            First to reach {gameState.targetAmount} wins!{" "}
-            {Object.keys(gameState.players).length}/{gameState.maxPlayers}{" "}
-            players joined
+            First to {gameState.targetAmount} wins!
           </h2>
-        </div> */}
+        </div>
         <div className="grid gap-2 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
           {showWinningConfetti && (
             <Confetti
@@ -212,8 +210,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
       <div className="flex justify-center items-center mt-4">
         <InviteButton />
         <UsersRound size={22} className="mx-2" />{" "}
-        {Object.keys(gameState.players).length}/{gameState.maxPlayers} players
-        connected
+        {Object.keys(gameState.players).length}/{gameState.maxPlayers}
       </div>
       {/* {process.env.NODE_ENV === "development" && (
         <pre className="mx-auto mt-4 rounded-md bg-slate-950 p-4">
