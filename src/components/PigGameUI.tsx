@@ -93,12 +93,16 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const winner = getPlayerState(gameState, gameState?.winnerId);
 
   if (gameFullMessage) {
-    return <div>{gameFullMessage && <div>{gameFullMessage}</div>}</div>;
+    return (
+      <div className="flex justify-center">
+        {gameFullMessage && <div>{gameFullMessage}</div>}
+      </div>
+    );
   }
 
   if (!gameState) {
     return (
-      <div>
+      <div className="flex justify-center">
         <Loader2 size={22} className="mr-2 animate-spin" />
         Loading...
       </div>
