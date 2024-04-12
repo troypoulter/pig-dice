@@ -56,10 +56,6 @@ export function PlayerCard({
           playerState.currentScore > 0 ? "bg-green-500" : "bg-primary"
         }
       />
-      {/* <div className="bg-green-500 text-white text-center py-2 px-4 mt-2 rounded-lg">
-        <div className="text-md font-medium">CURRENT</div>
-        <div className="text-3xl font-semibold">{playerState.currentScore}</div>
-      </div> */}
     </Card>
   );
 }
