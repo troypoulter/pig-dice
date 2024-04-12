@@ -4,6 +4,7 @@ import { Card } from "./ui/card";
 import Avatar from "boring-avatars";
 import { Badge } from "./ui/badge";
 import { Star } from "lucide-react";
+import { Progress } from "./ui/progress";
 
 export interface PlayerCardProps {
   gameState: GameState;
@@ -43,7 +44,18 @@ export function PlayerCard({
       <div className="flex flex-row items-center justify-center space-x-2">
         <h2 className="text-xl font-semibold text-wrap">{playerState.name}</h2>
       </div>
-      <div className="text-5xl mt-2 font-bold">{playerState.totalScore}</div>
+      <div className="text-5xl my-2 font-bold">{playerState.totalScore}</div>
+      <Progress
+        value={
+          playerState.currentScore > 0
+            ? playerState.totalScore + playerState.currentScore
+            : playerState.totalScore
+        }
+        max={gameState.targetAmount}
+        indicatorColor={
+          playerState.currentScore > 0 ? "bg-green-500" : "bg-primary"
+        }
+      />
       {/* <div className="bg-green-500 text-white text-center py-2 px-4 mt-2 rounded-lg">
         <div className="text-md font-medium">CURRENT</div>
         <div className="text-3xl font-semibold">{playerState.currentScore}</div>
