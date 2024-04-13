@@ -82,13 +82,13 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
           <PiggyBank size={30} />
         </div>
         <CardTitle>Create Game</CardTitle>
-        <CardDescription>
+        {/* <CardDescription>
           Quickly customise the game to your liking - then dive into the dice
           duel!
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
-        <Separator className="mb-4" />
+        {/* <Separator className="mb-4" /> */}
         <Form {...form}>
           {state?.message !== "" && !state.issues && (
             <div className="text-red-500">{state.message}</div>
