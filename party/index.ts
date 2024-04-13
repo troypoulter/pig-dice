@@ -89,7 +89,9 @@ export default class PigGameServer implements Party.Server {
         // If there are no more players, the game is over
         console.log("only one player left, select the winner!");
         gameState.hasGameStarted = false;
-        gameState.winnerId = Object.keys(gameState.players)[0]; // Automatically declare the remaining player as the winner
+        if (gameState.winnerId === undefined) {
+          gameState.winnerId = Object.keys(gameState.players)[0]; // Automatically declare the remaining player as the winner
+        }
       }
 
       await this.room.storage.put("gameState", gameState); // Persist the updated game state

@@ -61,7 +61,10 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         setMyId(data.connectedPlayerId);
       }
 
-      if (data.gameState.winnerId !== undefined) {
+      if (
+        data.gameState.winnerId !== undefined &&
+        data.gameState.hasGameStarted === true
+      ) {
         if (data.gameState.winnerId === myId) {
           setShowWinningConfetti(true);
         } else {
