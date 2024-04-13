@@ -19,7 +19,12 @@ import {
   UsersRound,
   Link,
 } from "lucide-react";
-import { cn, drawPigConfetti } from "@/lib/utils";
+import {
+  cn,
+  drawPigConfetti,
+  getRandomLoseMessage,
+  getRandomWinMessage,
+} from "@/lib/utils";
 import Confetti from "react-confetti";
 import { DiceIcon } from "@/lib/diceIcon";
 import { PlayerCard } from "./PlayerCard";
@@ -115,7 +120,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   return (
     <div>
       <div className="mb-6 flex flex-col items-center justify-center">
-        <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg bg-blue-100">
+        <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg border bg-card text-card-foreground shadow-md">
           <h2 className="text-xl md:text-3xl font-bold">
             First to {gameState.targetAmount} wins!{" "}
             {gameState.gamesPlayed > 0 && `Round: ${gameState.gamesPlayed}`}
@@ -166,15 +171,15 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
             </Button>
           )}
         {isThereAWinner && (
-          <div>
-            <h3>Winner: {winner?.name}</h3>
-            <p>
+          <div className="text-center">
+            <h3 className="text-3xl font-semibold">{winner?.name} Wins!</h3>
+            <p className="text-sm text-muted-foreground">
               {gameState?.winnerId === myId
-                ? "You won!"
-                : "Better luck next time!"}
+                ? getRandomWinMessage()
+                : getRandomLoseMessage()}
             </p>
             <Button
-              className="bg-green-500 hover:bg-green-500/90"
+              className="bg-green-500 hover:bg-green-500/90 mt-4"
               onClick={handleRestart}
             >
               <RefreshCcw size={22} className="mr-2" /> New Game!

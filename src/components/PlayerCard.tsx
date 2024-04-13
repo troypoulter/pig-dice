@@ -24,7 +24,8 @@ export function PlayerCard({
       key={playerId}
       className={cn(
         "flex flex-col items-center justify-center p-2 sm:p-4",
-        playerId === gameState.currentPlayerId && "bg-green-200"
+        playerId === gameState.currentPlayerId && "bg-green-200",
+        gameState.winnerId === playerId && "bg-yellow-200"
       )}
     >
       <div className="flex flex-col items-center">
