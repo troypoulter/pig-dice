@@ -50,7 +50,7 @@ export function PlayerCard({
           </Badge>
         )}
       </div>
-      <div className="flex flex-row items-center justify-center space-x-2">
+      <div className="flex flex-row items-center justify-center space-x-2 mt-2">
         <h2 className="text-xl font-semibold text-wrap">{playerState.name}</h2>
       </div>
       <div
