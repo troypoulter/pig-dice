@@ -23,7 +23,7 @@ export default function AnalyticsPage() {
         </p>
       </div>
       <Iframe
-        url="https://plausible.io/share/pig-dice.troypoulter.com?auth=FBvTCMvDS7Imqm4yAAD79&embed=true&theme=light&background=transparent"
+        url="https://plausible.io/share/pig-dice.troypoulter.com?auth=1HF2dW6F2qHdpqFo_t1q8&embed=true&theme=light&background=transparent"
         width="100%"
         height="1800px"
         id="plausible-embed"
