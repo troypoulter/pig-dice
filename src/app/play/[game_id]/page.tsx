@@ -1,5 +1,7 @@
 import PigGameUI from "@/components/PigGameUI";
+import { Instructions } from "@/components/instructions";
 import { TrackPageWithPlausible } from "@/components/track-page";
+import { Separator } from "@/components/ui/separator";
 import { PARTYKIT_URL } from "@/lib/env";
 import { notFound } from "next/navigation";
 
@@ -31,6 +33,8 @@ export default async function GamePage({
     <div>
       <TrackPageWithPlausible path="/play/_ID_" />
       <PigGameUI gameId={gameId} />
+      <Separator className="mt-4 mb-4 max-w-[980px] mx-auto" />
+      <Instructions />
     </div>
   );
 }

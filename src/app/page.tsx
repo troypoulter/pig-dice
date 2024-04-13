@@ -9,6 +9,8 @@ import {
 import { CreateGameForm } from "./_components/CreateGameForm";
 import { getTotalGamesPlayed } from "@/lib/db/functions";
 import { TrackPageWithPlausible } from "@/components/track-page";
+import { Instructions } from "@/components/instructions";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Home() {
   const totalGamesPlayed = await getTotalGamesPlayed();
@@ -26,6 +28,8 @@ export default async function Home() {
           <CreateGameForm gamesPlayed={totalGamesPlayed} />
         </PageActions>
       </PageHeader>
+      <Separator className="-mt-4 mb-4 max-w-[980px] mx-auto" />
+      <Instructions />
     </div>
   );
 }
