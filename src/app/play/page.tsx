@@ -13,7 +13,7 @@ export default async function Page() {
     <div className="mx-auto flex max-w-[980px] flex-col items-center">
       <TrackPageWithPlausible path="/play" />
       <CreateGameForm gamesPlayed={totalGamesPlayed} />
-      <Separator className="-mt-4 mb-4 max-w-[980px] mx-auto" />
+      <Separator className="mt-6 mb-4 max-w-[980px] mx-auto" />
       <Instructions />
     </div>
   );
