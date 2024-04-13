@@ -1,6 +1,6 @@
 import PigGameUI from "@/components/PigGameUI";
+import { TrackPageWithPlausible } from "@/components/track-page";
 import { PARTYKIT_URL } from "@/lib/env";
-import { GameState } from "@/lib/types/GameState";
 import { notFound } from "next/navigation";
 
 export default async function GamePage({
@@ -29,6 +29,7 @@ export default async function GamePage({
 
   return (
     <div>
+      <TrackPageWithPlausible path="/play/_ID_" />
       <PigGameUI gameId={gameId} />
     </div>
   );

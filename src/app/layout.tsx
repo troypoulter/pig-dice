@@ -55,12 +55,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <head>
-        {process.env.NODE_ENV === "production" && (
-          <PlausibleProvider
-            domain="pig-dice.troypoulter.com"
-            trackOutboundLinks
-          />
-        )}
+        <PlausibleProvider
+          domain="pig-dice.troypoulter.com"
+          trackOutboundLinks
+          manualPageviews
+        />
       </head>
       <body className={inter.className}>
         <div className="h-full relative flex flex-col min-h-screen bg-gradient-to-b from-white to-blue-100">
