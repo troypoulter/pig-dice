@@ -17,7 +17,7 @@ jobs:
           node-version: 20
           cache: "npm"
       - run: npm ci
-      - run: npx partykit deploy --var DATABASE_URL=${{ secrets.DATABASE_URL }} --var DATABASE_AUTH_TOKEN=${{ secrets.DATABASE_AUTH_TOKEN }}
+      - run: npx partykit deploy
         env:
           PARTYKIT_TOKEN: ${{ secrets.PARTYKIT_TOKEN }}
           PARTYKIT_LOGIN: ${{ secrets.PARTYKIT_LOGIN }}
