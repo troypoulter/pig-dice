@@ -202,6 +202,15 @@ export default class PigGameServer implements Party.Server {
         this.switchPlayer(gameState);
       } else {
         gameState.players[gameState.currentPlayerId].currentScore += roll;
+
+        if (
+          gameState.players[gameState.currentPlayerId].currentScore +
+            gameState.players[gameState.currentPlayerId].totalScore >=
+          gameState.targetAmount
+        ) {
+          gameState.winnerId = gameState.currentPlayerId;
+          gameState.players[gameState.currentPlayerId].wins += 1;
+        }
       }
 
       await this.room.storage.put("gameState", gameState); // Persist game state changes
