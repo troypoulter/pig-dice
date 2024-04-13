@@ -35,7 +35,7 @@ export function PlayerCard({
           colors={["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"]}
         />
         {playerId === myId && (
-          <Badge variant="secondary" className="-mt-3">
+          <Badge variant="default" className="-mt-3">
             <Star size="16" className="mr-1" color="#F0AB3D" fill="#F0AB3D" />
             You
             <Trophy size="16" className="mx-1" color="#F0AB3D" />
