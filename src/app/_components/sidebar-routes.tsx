@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Play } from "lucide-react";
+import { Home, LineChart, Play } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 import { Dispatch, SetStateAction } from "react";
 
@@ -15,11 +15,11 @@ const routes = [
     label: "Play",
     href: "/play",
   },
-  // {
-  //     icon: LineChart,
-  //     label: "Analytics",
-  //     href: "/analytics"
-  // }
+  {
+    icon: LineChart,
+    label: "Analytics",
+    href: "/analytics",
+  },
 ];
 
 interface SidebarRoutesProps {
