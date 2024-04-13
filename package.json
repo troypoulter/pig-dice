@@ -9,10 +9,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "db:studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:push": "drizzle-kit push:sqlite"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@libsql/client": "^0.6.0",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-progress": "^1.0.3",
@@ -22,6 +26,7 @@
     "boring-avatars": "^1.10.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "drizzle-orm": "^0.30.8",
     "lucide-react": "^0.365.0",
     "nanoid": "^5.0.7",
     "next": "14.1.4",
@@ -42,6 +47,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "concurrently": "^8.2.2",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "eslint-config-prettier": "^9.1.0",

@@ -1,9 +1,14 @@
-import { CreateGameForm } from "../_components/CreateGameForm";
+"use server";
 
-export default function Page() {
+import { CreateGameForm } from "../_components/CreateGameForm";
+import { getTotalGamesPlayed } from "@/lib/db/functions";
+
+export default async function Page() {
+  const totalGamesPlayed = await getTotalGamesPlayed();
+
   return (
     <div className="mx-auto flex max-w-[980px] flex-col items-center">
-      <CreateGameForm />
+      <CreateGameForm gamesPlayed={totalGamesPlayed} />
     </div>
   );
 }

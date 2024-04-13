@@ -1,5 +1,8 @@
 import { createGameSchema } from "@/app/_components/createGameSchema";
+import { db } from "@/lib/db";
+import { rooms } from "@/lib/db/schema";
 import { GameState } from "@/lib/types/GameState";
+import { eq, sql } from "drizzle-orm";
 import type * as Party from "partykit/server";
 
 export default class PigGameServer implements Party.Server {
@@ -27,6 +30,7 @@ export default class PigGameServer implements Party.Server {
       // Keeping this here for easy reference later.
       // name: `Player ${gameState.totalJoinedPlayers}`,
       name: generateFunName(),
+      wins: 0,
       totalScore: 0,
       currentScore: 0,
     };
@@ -121,6 +125,7 @@ export default class PigGameServer implements Party.Server {
           hasGameStarted: false,
           targetAmount: newGame.data.targetScore,
           maxPlayers: newGame.data.numberOfPlayers,
+          gamesPlayed: 0,
           totalJoinedPlayers: 0,
           players: {},
           playerOrder: [],
@@ -131,6 +136,16 @@ export default class PigGameServer implements Party.Server {
         }; // Initialize the game state
         console.log("New game room created");
         await this.room.storage.put("gameState", gameState); // Persist the new game state
+
+        await db
+          .insert(rooms)
+          .values({
+            roomId: this.room.id,
+            maxPlayers: gameState.maxPlayers,
+            targetScore: gameState.targetAmount,
+          })
+          .onConflictDoNothing();
+
         return new Response("New game room created.", { status: 200 });
       } else {
         console.log("Game is already in progress.");
@@ -165,7 +180,11 @@ export default class PigGameServer implements Party.Server {
     if (event.type === "start") {
       if (gameState.hasGameStarted) return; // Exit if the game is already started
       gameState.hasGameStarted = true;
+      gameState.gamesPlayed += 1;
+
+      await this.incrementRoomGamesPlayed(this.room.id);
       await this.room.storage.put("gameState", gameState); // Persist game state changes
+
       this.room.broadcast(
         JSON.stringify({ message: "Game has started!", gameState })
       );
@@ -199,9 +218,10 @@ export default class PigGameServer implements Party.Server {
         gameState.targetAmount
       ) {
         gameState.winnerId = gameState.currentPlayerId;
+        gameState.players[gameState.currentPlayerId].wins += 1;
+      } else {
+        this.switchPlayer(gameState);
       }
-
-      this.switchPlayer(gameState);
 
       await this.room.storage.put("gameState", gameState); // Persist game state changes
       this.room.broadcast(
@@ -220,8 +240,11 @@ export default class PigGameServer implements Party.Server {
       gameState.currentPlayerId = gameState.winnerId;
       gameState.winnerId = undefined; // Reset the winner
       gameState.lastRoll = undefined; // Reset the last roll
+      gameState.gamesPlayed += 1;
 
+      await this.incrementRoomGamesPlayed(this.room.id);
       await this.room.storage.put("gameState", gameState); // Persist the reset game state
+
       this.room.broadcast(
         JSON.stringify({ message: "Game restarted", gameState })
       );
@@ -239,6 +262,15 @@ export default class PigGameServer implements Party.Server {
 
     // Persist the updated game state with the new current player.
     await this.room.storage.put("gameState", gameState);
+  }
+
+  private async incrementRoomGamesPlayed(roomId: string) {
+    await db
+      .update(rooms)
+      .set({
+        gamesPlayed: sql`${rooms.gamesPlayed} + 1`,
+      })
+      .where(eq(rooms.roomId, roomId));
   }
 }
 

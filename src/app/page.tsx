@@ -7,8 +7,11 @@ import {
   PageActions,
 } from "@/components/page-header";
 import { CreateGameForm } from "./_components/CreateGameForm";
+import { getTotalGamesPlayed } from "@/lib/db/functions";
 
 export default async function Home() {
+  const totalGamesPlayed = await getTotalGamesPlayed();
+
   return (
     <div>
       <PageHeader>
@@ -18,7 +21,7 @@ export default async function Home() {
           every roll can lead to victory or defeat!
         </PageHeaderDescription>
         <PageActions>
-          <CreateGameForm />
+          <CreateGameForm gamesPlayed={totalGamesPlayed} />
         </PageActions>
       </PageHeader>
     </div>

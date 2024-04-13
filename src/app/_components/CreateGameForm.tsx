@@ -54,7 +54,11 @@ function CreateGameButton() {
   );
 }
 
-export function CreateGameForm() {
+interface CreateGameFormProps {
+  gamesPlayed: number;
+}
+
+export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
   const [state, formAction] = useFormState(createGameRoom, {
     message: "",
   });
@@ -141,6 +145,10 @@ export function CreateGameForm() {
               )}
             />
             <CreateGameButton />
+            <div className="text-sm text-muted-foreground text-center">
+              {gamesPlayed ? gamesPlayed.toLocaleString() : 0} games played so
+              far!
+            </div>
           </form>
         </Form>
         {/* <form action={createGameRoom}>

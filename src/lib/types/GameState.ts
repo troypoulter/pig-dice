@@ -2,6 +2,7 @@ export type PlayerId = string;
 
 export interface PlayerState {
   name: string;
+  wins: number;
   totalScore: number;
   currentScore: number;
 }
@@ -11,6 +12,7 @@ export interface GameState {
   hasGameStarted: boolean;
   maxPlayers: number;
   totalJoinedPlayers: number;
+  gamesPlayed: number;
   players: Record<PlayerId, PlayerState>;
   playerOrder: PlayerId[];
   currentPlayerIndex: number;

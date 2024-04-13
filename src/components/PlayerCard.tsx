@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
 import Avatar from "boring-avatars";
 import { Badge } from "./ui/badge";
-import { Star } from "lucide-react";
+import { Star, Trophy } from "lucide-react";
 import { Progress } from "./ui/progress";
 
 export interface PlayerCardProps {
@@ -27,7 +27,7 @@ export function PlayerCard({
         playerId === gameState.currentPlayerId && "bg-green-200"
       )}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center">
         <Avatar
           size={64}
           name={playerState.name}
@@ -38,6 +38,14 @@ export function PlayerCard({
           <Badge variant="secondary" className="-mt-3">
             <Star size="16" className="mr-1" color="#F0AB3D" fill="#F0AB3D" />
             You
+            <Trophy size="16" className="mx-1" color="#F0AB3D" />
+            {playerState.wins} win{playerState.wins !== 1 && "s"}
+          </Badge>
+        )}
+        {playerId !== myId && (
+          <Badge variant="secondary" className="-mt-3">
+            <Trophy size="16" className="mr-1" color="#F0AB3D" />
+            {playerState.wins} wins
           </Badge>
         )}
       </div>
