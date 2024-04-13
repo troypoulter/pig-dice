@@ -12,8 +12,7 @@
     "lint:fix": "next lint --fix",
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:push": "drizzle-kit push:sqlite --strict",
-    "db:push:prod": "drizzle-kit push:sqlite"
+    "db:push": "drizzle-kit push:sqlite"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",

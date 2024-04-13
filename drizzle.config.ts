@@ -9,4 +9,5 @@ export default {
     authToken: process.env.DATABASE_AUTH_TOKEN,
   },
   verbose: true,
+  strict: true,
 } satisfies Config;
