@@ -75,7 +75,7 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
 
   return (
     <Card className="w-[560px]">
-      <CardHeader className="items-center pb-4">
+      <CardHeader className="items-center pb-0">
         <div className="flex flex-row gap-x-1 items-baseline">
           <Dices size={30} />
           <X size={22} />
