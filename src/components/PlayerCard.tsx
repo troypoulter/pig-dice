@@ -32,7 +32,7 @@ export function PlayerCard({
       <div className="flex flex-col items-center">
         {playerId === BOT_ID && (
           <Image
-            src="/mr-pigglewiggle.webp"
+            src="/pigglewiggle.webp"
             width={64}
             height={64}
             alt="Picture of the glorious PiggleWiggle"
