@@ -98,7 +98,9 @@ export default class PigGameServer implements Party.Server {
         console.log("only one player left, select the winner!");
         gameState.hasGameStarted = false;
         if (gameState.winnerId === undefined) {
-          gameState.winnerId = Object.keys(gameState.players)[0]; // Automatically declare the remaining player as the winner
+          // Automatically declare the remaining player as the winner
+          // We won't record this as a player/bot win.
+          gameState.winnerId = Object.keys(gameState.players)[0];
         }
       }
 
@@ -155,6 +157,7 @@ export default class PigGameServer implements Party.Server {
             roomId: this.room.id,
             maxPlayers: gameState.maxPlayers,
             targetScore: gameState.targetAmount,
+            botEnabled: newGame.data.isBotGame,
           })
           .onConflictDoNothing();
 
@@ -194,7 +197,6 @@ export default class PigGameServer implements Party.Server {
       gameState.hasGameStarted = true;
       gameState.gamesPlayed += 1;
 
-      await this.incrementRoomGamesPlayed(this.room.id);
       await this.room.storage.put("gameState", gameState); // Persist game state changes
 
       this.room.broadcast(
@@ -224,6 +226,12 @@ export default class PigGameServer implements Party.Server {
         ) {
           gameState.winnerId = gameState.currentPlayerId;
           gameState.players[gameState.currentPlayerId].wins += 1;
+
+          if (gameState.currentPlayerId === gameState.botPlayerId) {
+            await this.incrementRoomBotWins(this.room.id);
+          } else {
+            await this.incrementRoomPlayerWins(this.room.id);
+          }
         }
       }
 
@@ -271,7 +279,6 @@ export default class PigGameServer implements Party.Server {
       gameState.lastRoll = undefined; // Reset the last roll
       gameState.gamesPlayed += 1;
 
-      await this.incrementRoomGamesPlayed(this.room.id);
       await this.room.storage.put("gameState", gameState); // Persist the reset game state
 
       this.room.broadcast(
@@ -293,10 +300,21 @@ export default class PigGameServer implements Party.Server {
     await this.room.storage.put("gameState", gameState);
   }
 
-  private async incrementRoomGamesPlayed(roomId: string) {
+  private async incrementRoomBotWins(roomId: string) {
     await db
       .update(rooms)
       .set({
+        botWins: sql`${rooms.botWins} + 1`,
+        gamesPlayed: sql`${rooms.gamesPlayed} + 1`,
+      })
+      .where(eq(rooms.roomId, roomId));
+  }
+
+  private async incrementRoomPlayerWins(roomId: string) {
+    await db
+      .update(rooms)
+      .set({
+        playerWins: sql`${rooms.playerWins} + 1`,
         gamesPlayed: sql`${rooms.gamesPlayed} + 1`,
       })
       .where(eq(rooms.roomId, roomId));

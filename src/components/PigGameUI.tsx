@@ -29,6 +29,8 @@ import Confetti from "react-confetti";
 import { DiceIcon } from "@/lib/diceIcon";
 import { PlayerCard } from "./PlayerCard";
 import InviteButton from "./InviteButton";
+import { useWindowSize } from "@/lib/use-window-size";
+import { ConfettiScreen } from "./confetti-screen";
 
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
@@ -38,6 +40,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameFullMessage, setGameFullMessage] = useState("");
   const [increment, setIncrement] = useState(0);
   const [isBotTurn, setIsBotTurn] = useState(false);
+  const { width, height } = useWindowSize();
 
   const socket = usePartySocket({
     host: PARTYKIT_HOST,
@@ -163,6 +166,23 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   return (
     <div>
       <div className="mb-6 flex flex-col items-center justify-center">
+        {showWinningConfetti && (
+          <ConfettiScreen
+            duration={3000}
+            gravity={0.075}
+            initialVelocityY={50}
+            wind={0.005}
+          />
+        )}
+        {showLosingConfetti && (
+          <ConfettiScreen
+            drawShape={drawPigConfetti}
+            duration={3000}
+            gravity={0.075}
+            initialVelocityY={50}
+            wind={0.005}
+          />
+        )}
         <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg border bg-card text-card-foreground shadow-md">
           <h2 className="text-xl md:text-3xl font-bold">
             First to {gameState.targetAmount} wins!{" "}
@@ -170,23 +190,6 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           </h2>
         </div>
         <div className="grid gap-2 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-          {showWinningConfetti && (
-            <Confetti
-              numberOfPieces={350}
-              gravity={0.075}
-              recycle={false}
-              onConfettiComplete={() => setShowWinningConfetti(false)}
-            />
-          )}
-          {showLosingConfetti && (
-            <Confetti
-              numberOfPieces={350}
-              gravity={0.075}
-              drawShape={drawPigConfetti}
-              recycle={false}
-              onConfettiComplete={() => setShowLosingConfetti(false)}
-            />
-          )}
           {Object.entries(gameState.players).map(
             ([playerId, playerState]: [PlayerId, PlayerState]) => (
               <PlayerCard

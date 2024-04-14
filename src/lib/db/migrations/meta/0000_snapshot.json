@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "59558249-b330-452c-8262-e5e4748dc2e0",
+  "id": "ae7a4aab-d495-40b3-8694-9f0496bfa231",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "rooms": {
@@ -35,8 +35,32 @@
           "notNull": true,
           "autoincrement": false
         },
+        "bot_enabled": {
+          "name": "bot_enabled",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": false
+        },
         "games_played": {
           "name": "games_played",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "bot_wins": {
+          "name": "bot_wins",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "player_wins": {
+          "name": "player_wins",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
