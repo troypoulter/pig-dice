@@ -73,7 +73,7 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
     },
   });
 
-  console.log(form.getValues());
+  const isBotGame = form.watch("isBotGame");
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -139,7 +139,7 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
                           <RadioGroupItem value="true" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Play with Mr. PiggleWiggle
+                          Challenge Mr. PiggleWiggle (Computer)
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
@@ -147,7 +147,7 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
                           <RadioGroupItem value="false" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Play with friends
+                          Play with friends online
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -157,19 +157,21 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="numberOfPlayers"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Number of Players (2-6)</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {isBotGame === "false" && (
+              <FormField
+                control={form.control}
+                name="numberOfPlayers"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Number of Players (2-6)</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="targetScore"
