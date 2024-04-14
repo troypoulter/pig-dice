@@ -1,5 +1,5 @@
 export const BOT_ID = "bot";
-export const BOT_NAME = "Computer";
+export const BOT_NAME = "Mr. PiggleWiggle";
 
 export type PlayerId = string;
 
