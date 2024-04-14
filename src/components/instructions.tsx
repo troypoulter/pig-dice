@@ -23,8 +23,8 @@ export function Instructions() {
             <li>Take turns rolling the dice.</li>
             <li>Keep rolling to add more points to your score for the turn.</li>
             <li>
-              Stop rolling whenever you feel like it and add the points you
-              rolled to your total score.
+              Stop rolling when you feel like it and add the points you rolled
+              to your score.
             </li>
             <li>
               But watch out! If you roll a 1, your turn ends and you score zero
