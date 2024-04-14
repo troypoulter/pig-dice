@@ -35,7 +35,7 @@ export function PlayerCard({
             src="/mr-pigglewiggle.webp"
             width={64}
             height={64}
-            alt="Picture of the glorious Mr. PiggleWiggle"
+            alt="Picture of the glorious PiggleWiggle"
           />
         )}
         {playerId !== BOT_ID && (

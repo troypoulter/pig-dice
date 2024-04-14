@@ -7,7 +7,7 @@ export function Footer() {
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <p className="flex flex-row text-center text-sm leading-loose text-muted-foreground md:text-left">
             <PiggyBank size={28} color="#007DFC" className="mr-2" />
-            <div>
+            <span>
               Built by{" "}
               <a
                 href="https://www.troypoulter.com/"
@@ -36,7 +36,7 @@ export function Footer() {
                 {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA!.substring(0, 7)}
               </a>
               .
-            </div>
+            </span>
           </p>
         </div>
       </div>

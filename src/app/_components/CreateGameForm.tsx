@@ -146,7 +146,7 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
                           <RadioGroupItem value="true" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Challenge Mr. PiggleWiggle (Computer)
+                          Challenge PiggleWiggle (Computer)
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
