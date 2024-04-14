@@ -8,7 +8,7 @@ import {
   getPlayerState,
 } from "@/lib/types/GameState";
 import usePartySocket from "partysocket/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dice6,
@@ -37,6 +37,8 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const [showLosingConfetti, setShowLosingConfetti] = useState(false);
   const [gameFullMessage, setGameFullMessage] = useState("");
   const [increment, setIncrement] = useState(0);
+  const [isBotTurn, setIsBotTurn] = useState(false);
+  const [botRollCount, setBotRollCount] = useState(0);
 
   const socket = usePartySocket({
     host: PARTYKIT_HOST,
@@ -60,6 +62,11 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           // do it when there is no winner.
           setIncrement(increment + 1);
         }
+
+        // Check if it's the bot's turn
+        if (data.gameState.currentPlayerId === data.gameState.botPlayerId) {
+          setIsBotTurn(true);
+        }
       }
 
       if (data.connectedPlayerId) {
@@ -79,20 +86,51 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
     },
   });
 
+  // Handle bot logic client-side.
+  useEffect(() => {
+    if (gameState?.winnerId !== undefined) {
+      return;
+    }
+    if (isBotTurn && botRollCount < 3) {
+      const timer = setTimeout(() => {
+        socket.send(JSON.stringify({ type: "roll", isBot: true }));
+        setBotRollCount(botRollCount + 1);
+      }, 1000); // Delay each roll by 1 seconds
+
+      return () => clearTimeout(timer);
+    } else if (isBotTurn && botRollCount === 3) {
+      const timer = setTimeout(() => {
+        socket.send(JSON.stringify({ type: "hold", isBot: true }));
+        setIsBotTurn(false);
+        setBotRollCount(0); // Reset bot roll count for the next turn
+      }, 2000); // Delay sending hold by 2 seconds to account for the server processing the previous roll
+
+      return () => clearTimeout(timer);
+    }
+  }, [isBotTurn, botRollCount, socket, gameState]);
+
+  // Reset bot turn when the player changes
+  useEffect(() => {
+    if (gameState && gameState.currentPlayerId !== gameState.botPlayerId) {
+      setIsBotTurn(false);
+      setBotRollCount(0);
+    }
+  }, [gameState]);
+
   const handleRollDice = () => {
-    socket.send(JSON.stringify({ type: "roll" }));
+    socket.send(JSON.stringify({ type: "roll", isBot: false }));
   };
 
   const handleHold = () => {
-    socket.send(JSON.stringify({ type: "hold" }));
+    socket.send(JSON.stringify({ type: "hold", isBot: false }));
   };
 
   const handleRestart = () => {
-    socket.send(JSON.stringify({ type: "restart" }));
+    socket.send(JSON.stringify({ type: "restart", isBot: false }));
   };
 
   const handleStart = () => {
-    socket.send(JSON.stringify({ type: "start" }));
+    socket.send(JSON.stringify({ type: "start", isBot: false }));
   };
 
   const isMyTurn = myId === gameState?.currentPlayerId;

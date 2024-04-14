@@ -1,7 +1,7 @@
 import { createGameSchema } from "@/app/_components/createGameSchema";
 import { db } from "@/lib/db";
 import { rooms } from "@/lib/db/schema";
-import { GameState } from "@/lib/types/GameState";
+import { BOT_ID, BOT_NAME, GameState } from "@/lib/types/GameState";
 import { eq, sql } from "drizzle-orm";
 import type * as Party from "partykit/server";
 
@@ -39,7 +39,15 @@ export default class PigGameServer implements Party.Server {
 
     if (Object.keys(gameState.players).length === 1) {
       gameState.currentPlayerId = connection.id;
-      console.log(`First player connected: ${connection.id}`);
+      if (gameState.botPlayerId) {
+        gameState.players[BOT_ID] = {
+          name: BOT_NAME,
+          wins: 0,
+          totalScore: 0,
+          currentScore: 0,
+        };
+        gameState.playerOrder.push(BOT_ID);
+      }
     }
 
     await this.room.storage.put("gameState", gameState); // Persist game state changes
@@ -126,7 +134,7 @@ export default class PigGameServer implements Party.Server {
         gameState = {
           hasGameStarted: false,
           targetAmount: newGame.data.targetScore,
-          maxPlayers: newGame.data.numberOfPlayers,
+          maxPlayers: newGame.data.isBotGame ? 2 : newGame.data.numberOfPlayers,
           gamesPlayed: 0,
           totalJoinedPlayers: 0,
           players: {},
@@ -135,7 +143,9 @@ export default class PigGameServer implements Party.Server {
           currentPlayerId: "",
           lastRoll: undefined,
           winnerId: undefined,
+          botPlayerId: newGame.data.isBotGame ? BOT_ID : undefined,
         }; // Initialize the game state
+
         console.log("New game room created");
         await this.room.storage.put("gameState", gameState); // Persist the new game state
 
@@ -192,7 +202,11 @@ export default class PigGameServer implements Party.Server {
       );
     }
 
-    if (event.type === "roll" && sender.id === gameState.currentPlayerId) {
+    if (
+      event.type === "roll" &&
+      (sender.id === gameState.currentPlayerId ||
+        gameState.currentPlayerId === gameState.botPlayerId)
+    ) {
       if (gameState.winnerId) return; // Exit if the game is already over.
 
       const roll = Math.floor(Math.random() * 6) + 1;
@@ -217,7 +231,11 @@ export default class PigGameServer implements Party.Server {
       this.room.broadcast(JSON.stringify({ message: "Turn done!", gameState }));
     }
 
-    if (event.type === "hold" && sender.id === gameState.currentPlayerId) {
+    if (
+      event.type === "hold" &&
+      (sender.id === gameState.currentPlayerId ||
+        gameState.currentPlayerId === gameState.botPlayerId)
+    ) {
       if (gameState.winnerId) return; // Exit if the game is already over.
 
       gameState.players[gameState.currentPlayerId].totalScore +=

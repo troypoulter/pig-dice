@@ -1,3 +1,6 @@
+export const BOT_ID = "bot";
+export const BOT_NAME = "Computer";
+
 export type PlayerId = string;
 
 export interface PlayerState {
@@ -19,6 +22,7 @@ export interface GameState {
   currentPlayerId: PlayerId;
   lastRoll?: number;
   winnerId?: PlayerId;
+  botPlayerId?: PlayerId;
 }
 
 export const getPlayerState = (
