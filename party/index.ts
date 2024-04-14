@@ -131,12 +131,14 @@ export default class PigGameServer implements Party.Server {
         );
       }
 
+      const isBotGame = newGame.data.isBotGame === "true";
+
       let gameState = await this.room.storage.get<GameState>("gameState");
       if (!gameState) {
         gameState = {
           hasGameStarted: false,
           targetAmount: newGame.data.targetScore,
-          maxPlayers: newGame.data.isBotGame ? 2 : newGame.data.numberOfPlayers,
+          maxPlayers: isBotGame ? 2 : newGame.data.numberOfPlayers,
           gamesPlayed: 0,
           totalJoinedPlayers: 0,
           players: {},
@@ -145,7 +147,7 @@ export default class PigGameServer implements Party.Server {
           currentPlayerId: "",
           lastRoll: undefined,
           winnerId: undefined,
-          botPlayerId: newGame.data.isBotGame ? BOT_ID : undefined,
+          botPlayerId: isBotGame ? BOT_ID : undefined,
         }; // Initialize the game state
 
         console.log("New game room created");
@@ -157,7 +159,7 @@ export default class PigGameServer implements Party.Server {
             roomId: this.room.id,
             maxPlayers: gameState.maxPlayers,
             targetScore: gameState.targetAmount,
-            botEnabled: newGame.data.isBotGame,
+            botEnabled: isBotGame,
           })
           .onConflictDoNothing();
 

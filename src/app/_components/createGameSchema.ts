@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createGameSchema = z.object({
-  numberOfPlayers: z.number({ coerce: true }).min(2).max(6),
-  targetScore: z.number({ coerce: true }).min(1),
-  isBotGame: z.boolean().default(true),
+  numberOfPlayers: z.number({ coerce: true }).min(2).max(6).default(2),
+  targetScore: z.number({ coerce: true }).min(1).default(100),
+  isBotGame: z.string().default("true"),
 });

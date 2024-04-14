@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { createGameSchema } from "./createGameSchema";
 import { useRef } from "react";
 import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 function CreateGameButton() {
   const { pending } = useFormStatus();
@@ -67,9 +68,12 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
     defaultValues: {
       numberOfPlayers: 2,
       targetScore: 100,
+      isBotGame: "true",
       ...(state?.fields ?? {}),
     },
   });
+
+  console.log(form.getValues());
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -118,6 +122,41 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
             //   })(evt);
             // }}
           >
+            <FormField
+              control={form.control}
+              name="isBotGame"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Choose your opponent</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="true" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Play with Mr. PiggleWiggle
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="false" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Play with friends
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                  <input type="hidden" name={field.name} value={field.value} />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="numberOfPlayers"
