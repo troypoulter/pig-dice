@@ -1,10 +1,11 @@
-import { GameState, PlayerState } from "@/lib/types/GameState";
+import { BOT_ID, GameState, PlayerState } from "@/lib/types/GameState";
 import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
 import Avatar from "boring-avatars";
 import { Badge } from "./ui/badge";
 import { Star, Trophy } from "lucide-react";
 import { Progress } from "./ui/progress";
+import Image from "next/image";
 
 export interface PlayerCardProps {
   gameState: GameState;
@@ -29,12 +30,22 @@ export function PlayerCard({
       )}
     >
       <div className="flex flex-col items-center">
-        <Avatar
-          size={64}
-          name={playerState.name}
-          variant="beam"
-          colors={["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"]}
-        />
+        {playerId === BOT_ID && (
+          <Image
+            src="/mr-pigglewiggle.webp"
+            width={64}
+            height={64}
+            alt="Picture of the glorious Mr. PiggleWiggle"
+          />
+        )}
+        {playerId !== BOT_ID && (
+          <Avatar
+            size={64}
+            name={playerState.name}
+            variant="beam"
+            colors={["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"]}
+          />
+        )}
         {playerId === myId && (
           <Badge variant="default" className="-mt-3">
             <Star size="16" className="mr-1" color="#F0AB3D" fill="#F0AB3D" />
