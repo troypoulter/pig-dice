@@ -28,6 +28,13 @@ import { createGameSchema } from "./createGameSchema";
 import { useRef } from "react";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function CreateGameButton() {
   const { pending } = useFormStatus();
@@ -158,16 +165,48 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
               )}
             />
             {isBotGame === "false" && (
+              // <FormField
+              //   control={form.control}
+              //   name="numberOfPlayers"
+              //   render={({ field }) => (
+              //     <FormItem>
+              //       <FormLabel>Number of Players (2-6)</FormLabel>
+              //       <FormControl>
+              //         <Input {...field} />
+              //       </FormControl>
+              //       <FormMessage />
+              //     </FormItem>
+              //   )}
+              // />
               <FormField
                 control={form.control}
                 name="numberOfPlayers"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Number of Players (2-6)</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
+                    <FormLabel>Number of Players</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={String(field.value)}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select number of players (2-6)" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {[2, 3, 4, 5, 6].map((number) => (
+                          <SelectItem key={number} value={String(number)}>
+                            {number} Players
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
+                    <input
+                      type="hidden"
+                      name={field.name}
+                      value={field.value}
+                    />
                   </FormItem>
                 )}
               />

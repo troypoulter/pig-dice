@@ -35,8 +35,8 @@ import { ConfettiScreen } from "./confetti-screen";
 export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameState, setGameState] = useState<GameState>();
   const [myId, setMyId] = useState<string>("");
-  const [showWinningConfetti, setShowWinningConfetti] = useState(false);
-  const [showLosingConfetti, setShowLosingConfetti] = useState(false);
+  const [winningConfettiPieces, setWinningConfettiPieces] = useState(0);
+  const [losingConfettiPieces, setLosingConfettiPieces] = useState(0);
   const [gameFullMessage, setGameFullMessage] = useState("");
   const [increment, setIncrement] = useState(0);
   const [isBotTurn, setIsBotTurn] = useState(false);
@@ -80,9 +80,11 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         data.gameState.hasGameStarted === true
       ) {
         if (data.gameState.winnerId === myId) {
-          setShowWinningConfetti(true);
+          setWinningConfettiPieces(300);
+          setTimeout(() => setWinningConfettiPieces(0), 3000);
         } else {
-          setShowLosingConfetti(true);
+          setLosingConfettiPieces(200);
+          setTimeout(() => setLosingConfettiPieces(0), 3000);
         }
       }
     },
@@ -166,23 +168,19 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   return (
     <div>
       <div className="mb-6 flex flex-col items-center justify-center">
-        {showWinningConfetti && (
-          <ConfettiScreen
-            duration={3000}
-            gravity={0.075}
-            initialVelocityY={50}
-            wind={0.005}
-          />
-        )}
-        {showLosingConfetti && (
-          <ConfettiScreen
-            drawShape={drawPigConfetti}
-            duration={3000}
-            gravity={0.075}
-            initialVelocityY={50}
-            wind={0.005}
-          />
-        )}
+        <ConfettiScreen
+          numberOfPieces={winningConfettiPieces}
+          gravity={0.075}
+          initialVelocityY={50}
+          wind={0.005}
+        />
+        <ConfettiScreen
+          numberOfPieces={losingConfettiPieces}
+          drawShape={drawPigConfetti}
+          gravity={0.075}
+          initialVelocityY={50}
+          wind={0.005}
+        />
         <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg border bg-card text-card-foreground shadow-md">
           <h2 className="text-xl md:text-3xl font-bold">
             First to {gameState.targetAmount} wins!{" "}
@@ -266,11 +264,13 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
           </Button>
         )}
       </div>
-      <div className="flex justify-center items-center mt-4">
-        <InviteButton />
-        <UsersRound size={22} className="mx-2" />{" "}
-        {Object.keys(gameState.players).length}/{gameState.maxPlayers}
-      </div>
+      {gameState.botPlayerId === undefined && (
+        <div className="flex justify-center items-center mt-4">
+          <InviteButton />
+          <UsersRound size={22} className="mx-2" />{" "}
+          {Object.keys(gameState.players).length}/{gameState.maxPlayers}
+        </div>
+      )}
       {/* {process.env.NODE_ENV === "development" && (
         <pre className="mx-auto mt-4 rounded-md bg-slate-950 p-4">
           <div className="text-white mb-2 font-bold">Dev Mode: Game State</div>
