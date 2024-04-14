@@ -38,7 +38,6 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   const [gameFullMessage, setGameFullMessage] = useState("");
   const [increment, setIncrement] = useState(0);
   const [isBotTurn, setIsBotTurn] = useState(false);
-  const [botRollCount, setBotRollCount] = useState(0);
 
   const socket = usePartySocket({
     host: PARTYKIT_HOST,
@@ -87,33 +86,39 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
   });
 
   // Handle bot logic client-side.
+  // 21 is an optimal number for the bot.
   useEffect(() => {
     if (gameState?.winnerId !== undefined) {
       return;
     }
-    if (isBotTurn && botRollCount < 3) {
+    if (
+      gameState &&
+      isBotTurn &&
+      gameState?.players[gameState.currentPlayerId].currentScore <= 21
+    ) {
       const timer = setTimeout(() => {
         socket.send(JSON.stringify({ type: "roll", isBot: true }));
-        setBotRollCount(botRollCount + 1);
       }, 1000); // Delay each roll by 1 seconds
 
       return () => clearTimeout(timer);
-    } else if (isBotTurn && botRollCount === 3) {
+    } else if (
+      gameState &&
+      isBotTurn &&
+      gameState?.players[gameState.currentPlayerId].currentScore > 21
+    ) {
       const timer = setTimeout(() => {
         socket.send(JSON.stringify({ type: "hold", isBot: true }));
         setIsBotTurn(false);
-        setBotRollCount(0); // Reset bot roll count for the next turn
       }, 2000); // Delay sending hold by 2 seconds to account for the server processing the previous roll
 
       return () => clearTimeout(timer);
     }
-  }, [isBotTurn, botRollCount, socket, gameState]);
+  }, [isBotTurn, socket, gameState]);
 
   // Reset bot turn when the player changes
   useEffect(() => {
     if (gameState && gameState.currentPlayerId !== gameState.botPlayerId) {
       setIsBotTurn(false);
-      setBotRollCount(0);
     }
   }, [gameState]);
 
