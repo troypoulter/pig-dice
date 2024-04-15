@@ -5,7 +5,7 @@ The classic game of Pig re-made in the web!
 > [!TIP]
 > You can play it live here [pig-dice.troypoulter.com](https://pig-dice.troypoulter.com/)!
 
-![hero_image](public/og.jpg)
+![hero_image](public/opengraph.jpg)
 
 ## Features
 

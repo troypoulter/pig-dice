@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: "Pig: The Ultimate Dice Duel",
     images: [
       {
-        url: `https://pig-dice.troypoulter.com/og.jpg`,
+        url: `https://pig-dice.troypoulter.com/opengraph.jpg`,
         width: 1200,
         height: 630,
         alt: "Pig: The Ultimate Dice Duel",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "Pig: The Ultimate Dice Duel",
     description:
       "Risk it all or play it safe in a game of strategy and luck - where every roll can lead to victory or defeat!",
-    images: [`https://pig-dice.troypoulter.com/og.jpg`],
+    images: [`https://pig-dice.troypoulter.com/opengraph.jpg`],
     creator: "@troypoulterr",
   },
 };
