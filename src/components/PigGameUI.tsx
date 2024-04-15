@@ -184,7 +184,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
         <div className="flex justify-between items-center py-2 px-4 mb-4 rounded-lg border bg-card text-card-foreground shadow-md">
           <h2 className="text-xl md:text-3xl font-bold">
             First to {gameState.targetAmount} wins!{" "}
-            {gameState.gamesPlayed > 0 && `Round: ${gameState.gamesPlayed}`}
+            {gameState.gamesPlayed > 0 && `Round ${gameState.gamesPlayed}`}
           </h2>
         </div>
         <div className="grid gap-2 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
