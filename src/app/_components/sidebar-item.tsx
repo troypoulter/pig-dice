@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { set } from "date-fns";
 import { LucideIcon } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
@@ -28,16 +29,15 @@ export const SidebarItem = ({
     pathname?.startsWith(`${href}/`);
 
   const onClick = () => {
-    router.push(href);
     if (setOpen) {
       setOpen(false);
     }
   };
 
   return (
-    <button
+    <Link
       onClick={onClick}
-      type="button"
+      href={href}
       className={cn(
         "flex items-center gap-x-2 text-slate-500 text-sm pl-6 md:p-4 rounded-lg transition-all hover:bg-muted",
         isActive && "bg-muted font-medium text-primary"
@@ -53,6 +53,6 @@ export const SidebarItem = ({
         />
         {label}
       </div>
-    </button>
+    </Link>
   );
 };

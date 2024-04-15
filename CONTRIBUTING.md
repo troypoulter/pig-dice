@@ -46,6 +46,12 @@ Follow their fantastic [Quickstart guide](https://docs.turso.tech/quickstart) an
 
 Start by reading their [CLI installation](https://docs.turso.tech/cli/installation) guide, then their [Local development - Turso CLI](https://docs.turso.tech/local-development#turso-cli) for the most up-to-date approach on setting it up!
 
+### Apply db changes
+
+```bash
+npm run db:push
+```
+
 ### Start the server
 
 ```bash
