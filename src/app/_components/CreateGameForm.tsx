@@ -74,7 +74,7 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
     resolver: zodResolver(createGameSchema),
     defaultValues: {
       numberOfPlayers: 2,
-      targetScore: 100,
+      targetScore: 50,
       isBotGame: "true",
       ...(state?.fields ?? {}),
     },
@@ -217,10 +217,25 @@ export function CreateGameForm({ gamesPlayed }: CreateGameFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Target Score</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
+                    defaultValue={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a target score" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {[50, 100].map((number) => (
+                        <SelectItem key={number} value={String(number)}>
+                          {number}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
+                  <input type="hidden" name={field.name} value={field.value} />
                 </FormItem>
               )}
             />

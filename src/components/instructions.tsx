@@ -11,8 +11,8 @@ export function Instructions() {
         <Target className="h-4 w-4" />
         <AlertTitle>Step 1: Set a target</AlertTitle>
         <AlertDescription>
-          Choose a target score to reach, usually 100 points, then start the
-          game!
+          Choose a target score to reach, usually 50 or 100 points, then start
+          the game!
         </AlertDescription>
       </Alert>
       <Alert className="max-w-[600px]">
