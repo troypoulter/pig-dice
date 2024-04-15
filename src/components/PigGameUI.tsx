@@ -103,7 +103,7 @@ export default function PigGameUI({ gameId }: { gameId: string }) {
     ) {
       const timer = setTimeout(() => {
         socket.send(JSON.stringify({ type: "roll", isBot: true }));
-      }, 1000); // Delay each roll by 1 seconds
+      }, 700); // Delay each roll by 1 seconds
 
       return () => clearTimeout(timer);
     } else if (
